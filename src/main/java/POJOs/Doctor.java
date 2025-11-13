@@ -5,9 +5,8 @@ import java.util.Set;
 
 public class Doctor extends User {
     private String password; //TODO: Encriptar;
-    private Doctor doctor;
     private LocalDate dob;
-    private Set<Report> reports;
+    private Set<Patient> patients;
 
     public Doctor(String email, String password, String fullName, LocalDate dob) {
         super(email, fullName);
