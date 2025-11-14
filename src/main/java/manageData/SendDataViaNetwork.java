@@ -34,7 +34,6 @@ public class SendDataViaNetwork {
 
 
     public void sendDoctor(Doctor doctor) throws IOException{
-        dataOutputStream.writeInt(doctor);
 
     }
 
