@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class Report {
+    private String reportId;
     private Patient patient;
     private LocalDate reportDate;
     private String patientObservation; //El texto que le manda el paciente al doctor, podemos hacer booleans como dijo arecha también

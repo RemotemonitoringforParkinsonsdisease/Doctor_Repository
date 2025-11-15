@@ -1,5 +1,7 @@
 package manageData;
 import POJOs.Doctor;
+import POJOs.Patient;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -34,6 +36,10 @@ public class SendDataViaNetwork {
 
 
     public void sendDoctor(Doctor doctor) throws IOException{
+
+    }
+
+    public void sendPatient(Patient patient) throws IOException{
 
     }
 

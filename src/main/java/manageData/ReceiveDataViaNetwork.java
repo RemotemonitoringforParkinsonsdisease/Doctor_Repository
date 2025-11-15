@@ -50,10 +50,16 @@ public class ReceiveDataViaNetwork {
         return patients;
     }
 
-    //TODO
-    /*public Report receiveReport() throws IOException{
+    //TODO: Ver como implementamos la recepción para todos los casos de Report
 
-    }*/
+    public Report receiveReportsOfAPatient(Patient patient) throws IOException{
+        //sendPatient() //Mandamos el paciente a la base de datos, y nos devolverá la lista de sus reports
+        int numReports = dataInputStream.readInt(); //Longitud de la lista de reports
+        for (int i = 0; i < numReports; i++) {
+           //LLamar al metodo receiveReport() y añadirlo a la lista (ver como implementarlo para los diferentes casos)
+        }
+        return null; //TODO: cambiar una vez implementado
+    }
 
     //TODO
     /*
