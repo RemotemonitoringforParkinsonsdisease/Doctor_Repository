@@ -77,9 +77,9 @@ public class ReceiveDataViaNetwork {
         int message = 0;
         try {
             message = dataInputStream.readInt();
-        } catch (IOException ex) {
-            System.err.println("Error al recibir int: " + ex.getMessage());
-            ex.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error al recibir int: " + e.getMessage());
+            e.printStackTrace();
         }
         return message;
     }
@@ -89,9 +89,9 @@ public class ReceiveDataViaNetwork {
             if (dataInputStream != null) {
                 dataInputStream.close();
             }
-        } catch (IOException ex) {
-            System.err.println("Error al liberar los recursos: " + ex.getMessage());
-            ex.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error al liberar los recursos: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
