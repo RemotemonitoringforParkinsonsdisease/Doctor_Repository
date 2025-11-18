@@ -1,6 +1,7 @@
 package POJOs;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -103,5 +104,20 @@ public class Report {
         this.patient = patient;
         this.reportDate = reportDate;
         this.symptoms = symptoms;
+    }
+    public LocalDate getReportDate() {
+        return reportDate;
+    }
+    public List<Symptoms> getSymptoms() {
+        return symptoms;
+    }
+    public Set<Signal> getSignals() {
+        return signals;
+    }
+    public String getPatientObservation() {
+        return patientObservation;
+    }
+    public Patient getPatient(){
+        return patient;
     }
 }

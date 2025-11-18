@@ -144,5 +144,9 @@ public class Signal {
     public void addValues(LinkedList<Float> values){
         this.values.addAll(values);
     }
+    @Override
+    public String toString() {
+        return  signalType + " " + "[" + samplingRate + " Hz]";
+    }
 
 }

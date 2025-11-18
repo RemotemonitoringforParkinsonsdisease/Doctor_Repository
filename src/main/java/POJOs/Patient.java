@@ -15,4 +15,10 @@ public class Patient extends User {
         super(email, fullName);
         this.dob = dob;
     }
+    public List<Report> getReports() {
+        return reports;
+    }
+    public String getFullName() {
+        return super.getFullName();
+    }
 }
