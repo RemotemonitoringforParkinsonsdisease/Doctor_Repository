@@ -2,8 +2,6 @@ package ui;
 
 import manageData.ReceiveDataViaNetwork;
 import manageData.SendDataViaNetwork;
-
-import java.io.DataOutputStream;
 import java.net.Socket;
 
 public class Connection {
