@@ -19,10 +19,8 @@ public class UI {
     }
     private void startConnection() { //TODO: Iterar hasta conexión correcta
         System.out.println("Select IP Address and Port to connect to :");
-        System.out.println("IP Address: ");
-        String ipAddress = System.console().readLine();
-        System.out.println("Port: ");
-        int port = Integer.parseInt(System.console().readLine());
+        String ipAddress = Utilities.readString("IP Address: ");
+        int port = Utilities.readInteger("Port: ");
         this.connection = new Connection(ipAddress, port);
     }
     private void preLoggedMenu(){
@@ -47,11 +45,10 @@ public class UI {
     }
     private void registerMenu(){
         System.out.println("\nREGISTER MENU");
-        System.out.println("Enter your full name : ");
-        String fullName = System.console().readLine();
+        String fullName = Utilities.readString("Enter your full name: ");
         LocalDate dob = Utilities.readDate("Enter your DOB: ");
-        System.out.println("Enter your email : ");
-        String email = System.console().readLine();
+        String email = Utilities.readString("Enter your email: ");
+        String password = Utilities.readString("Enter your password: ");
 
     }
     private void loginMenu(){
