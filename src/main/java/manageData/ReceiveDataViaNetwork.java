@@ -67,7 +67,6 @@ public class ReceiveDataViaNetwork {
         List<Report> reports = new ArrayList<Report>();
         for (int i = 0; i < numReports; i++) {
             reports.add(receiveReport());
-           //LLamar al metodo receiveReport() y añadirlo a la lista (ver como implementarlo para los diferentes casos)
         }
         return null; //TODO: cambiar una vez implementado
     }
