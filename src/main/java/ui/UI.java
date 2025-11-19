@@ -158,29 +158,41 @@ public class UI {
     private void reportMenu(Report report) throws IOException {
         System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
         System.out.println("Patient Observation: " + report.getPatientObservation());
-        System.out.println("Symptoms: " + report.getSymptoms().toString()); //TODO: Chekear el toString()
-        System.out.println("Signals: " + report.getSignals().toString() + "\n"); //TODO: Chekear el toString()
+        System.out.println("Symptoms: " + report.getSymptoms()); //TODO: Chekear el toString()
 
         int option = 0;
         do{
             System.out.println("0) Back to the Patient Menu");
-            System.out.println("1) Access signal data");
-            System.out.println("2) Add an observation");
+            System.out.println("1) Add an observation");
+            for(int i = 0 ; i < report.getSignals().size() ; i++){
+                System.out.println(i + 2 + ") Access " + report.getSignals().toString()); //TODO: aqui nos imprimiría todo 2)EDA,EMG,EEG, ACC
+            }
+
             option = Utilities.readInteger("Select an option: ");
             switch (option){
                 case 0:
                     return;
                 case 1:
-                    this.signalMenu(report);
-                    break;
-                case 2:
                     this.addObservationMenu(report);
                     break;
                 default:
-                    System.out.println("Please select a valid option.\n");
-                    break;
+                    if(option >= 2 && option <= report.getSignals().size()+1){
+                        this.signalMenu(report.getSignals().);
+                    }else{
+                        System.out.println("Please select a valid option.\n");
+                        break;
+                    }
+
             }
         } while (true);
+    }
+    //Observation
+    private void signalMenu(Report report) throws IOException {
+        System.out.println("\nSIGNAL MENU:  ");
+        System.out.println("Select the signal: ");
+        System.out.println("0) Retur: " + report.getSymptoms().toString()); //TODO: Chekear el toString()
+        System.out.println("Signals: " + report.getSignals().toString() + "\n"); //TODO: Chekear el toString()
+
     }
 
     private void addObservationMenu(Report report) throws IOException {

@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -139,6 +140,18 @@ public class Signal {
         return values;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Signal signal = (Signal) o;
+        return samplingRate == signal.samplingRate && Objects.equals(signalId, signal.signalId) && signalType == signal.signalType && Objects.equals(values, signal.values) && Objects.equals(signalFilename, signal.signalFilename);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(signalId, signalType, values, samplingRate, signalFilename);
+    }
 
     /**
      * Adds a list of new signal values to the existing signal.
