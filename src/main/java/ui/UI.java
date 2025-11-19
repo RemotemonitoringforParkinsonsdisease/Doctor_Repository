@@ -3,6 +3,7 @@ package ui;
 import POJOs.Doctor;
 import POJOs.Patient;
 import POJOs.Report;
+import manageData.ReceiveDataViaNetwork;
 
 import java.io.Console;
 import java.io.IOException;
@@ -136,21 +137,21 @@ public class UI {
         } while(true);
     }
     private void patientMenu(Patient patient){
-        List<Report> reports; //TODO: Cargar reports del paciente seleccionado
+        connection.getSendViaNetwork().sendStrings(patient.getId());//Se manda el id del paciente al server
+        patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient(patient));//Se recibe los records de dicho patient
         System.out.println("\nPATIENT MENU: " + patient.getFullName());
         int option = 0;
         do{
             System.out.println("0)Back to Patient List");
-            for(int i = 0; i < reports.size(); i++){
-                System.out.println((i+1) + ") Report Date: " + reports.get(i).getReportDate());
+            for(int i = 0; i < patient.getReports().size(); i++){
+                System.out.println((i+1) + ") Report Date: " + patient.getReports().get(i).getReportDate());
             }
             option = Utilities.readInteger("Select a report: ");
             if(option == 0){
                 return;
             }
-            if (option <= reports.size() + 1){
-                Report report = reports.get(option - 1);
-                this.reportMenu(report);
+            if (option <= patient.getReports().size() + 1){
+                this.reportMenu(patient.getReports().get(option - 1));
             }
         } while(true);
     }

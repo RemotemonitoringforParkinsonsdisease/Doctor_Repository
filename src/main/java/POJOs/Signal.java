@@ -107,7 +107,7 @@ public class Signal {
         return result;
     }
 
-    public String valuesToString() {
+    public String floatValuesToString() {
         StringBuilder message = new StringBuilder();
         String separator = " ";
 
@@ -121,7 +121,8 @@ public class Signal {
         return message.toString();
     }
 
-    public List<Float> stringToValues(String str) {
+
+    public List<Float> stringToFloatValues(String str) {
         values.clear(); // Limpiamos la lista antes de agregar nuevos valores.
         String[] tokens = str.split(" "); // Dividimos el String por el espacio.
         int size = tokens.length;
@@ -137,6 +138,8 @@ public class Signal {
         }
         return values;
     }
+
+
     /**
      * Adds a list of new signal values to the existing signal.
      * @param values a list of new signal values to add.

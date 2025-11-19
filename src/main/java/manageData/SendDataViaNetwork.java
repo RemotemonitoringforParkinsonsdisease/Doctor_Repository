@@ -14,6 +14,7 @@ public class SendDataViaNetwork {
     private DataOutputStream dataOutputStream;
 
 
+
     public SendDataViaNetwork(Socket socket) {
         try {
             this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -31,8 +32,6 @@ public class SendDataViaNetwork {
     public void sendInt(Integer message) throws IOException{
         dataOutputStream.writeInt(message);
     }
-
-
 
 
     public void sendDoctor(Doctor doctor) throws IOException{
