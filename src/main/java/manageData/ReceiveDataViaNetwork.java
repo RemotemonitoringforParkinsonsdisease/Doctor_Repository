@@ -68,7 +68,7 @@ public class ReceiveDataViaNetwork {
         for (int i = 0; i < numReports; i++) {
             reports.add(receiveReport());
         }
-        return null; //TODO: cambiar una vez implementado
+        return reports;
     }
 
 

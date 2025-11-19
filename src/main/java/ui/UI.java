@@ -15,7 +15,7 @@ public class UI {
 
     private Connection connection;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         UI ui = new UI();
         //TODO: Excepciones
@@ -25,13 +25,13 @@ public class UI {
 
 
     }
-    private void startConnection() { //TODO: Iterar hasta conexión correcta
+    private void startConnection() throws IOException{ //TODO: Iterar hasta conexión correcta
         System.out.println("Select IP Address and Port to connect to :");
         String ipAddress = Utilities.readString("IP Address: ");
         int port = Utilities.readInteger("Port: ");
         this.connection = new Connection(ipAddress, port);
     }
-    private void preLoggedMenu(){
+    private void preLoggedMenu() throws IOException {
         System.out.println("WELCOME TO THE DOCTOR APPLICATION\n\n");
         int option = 0;
         do {
@@ -51,7 +51,7 @@ public class UI {
         } while(true);
 
     }
-    private void registerMenu(){
+    private void registerMenu() throws IOException {
         System.out.println("\nREGISTER MENU");
         String fullName = Utilities.readString("Enter your full name: ");
         LocalDate dob = Utilities.readDate("Enter your DOB: ");
@@ -60,7 +60,7 @@ public class UI {
         //Enviar al servidor los datos para registrar
         //Se carga el propio doctor y sus pacientes
         //Una vez este confirmado
-        this.loggedMenu();
+        //this.loggedMenu(); TODO crearlo
     }
     private void loginMenu() throws IOException {
         System.out.println("\nLOGIN MENU DOCTOR");
@@ -116,7 +116,7 @@ public class UI {
             }
         } while(true);
     }
-    private void patientListMenu(Doctor doctor){
+    private void patientListMenu(Doctor doctor) throws IOException{
         System.out.println("\nPATIENT LIST MENU");
         List<Patient> patients = doctor.getPatients();
         int option = 0;
@@ -136,7 +136,7 @@ public class UI {
             System.out.println("Please select a valid option.\n");
         } while(true);
     }
-    private void patientMenu(Patient patient){
+    private void patientMenu(Patient patient) throws IOException {
         connection.getSendViaNetwork().sendStrings(patient.getId());//Se manda el id del paciente al server
         patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient(patient));//Se recibe los records de dicho patient
         System.out.println("\nPATIENT MENU: " + patient.getFullName());
@@ -150,12 +150,12 @@ public class UI {
             if(option == 0){
                 return;
             }
-            if (option <= patient.getReports().size() + 1){
+            if (option >= 1 && option <= patient.getReports().size()){
                 this.reportMenu(patient.getReports().get(option - 1));
             }
         } while(true);
     }
-    private void reportMenu(Report report){
+    private void reportMenu(Report report) throws IOException {
         System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
         System.out.println("Patient Observation: " + report.getPatientObservation());
         System.out.println("Symptoms: " + report.getSymptoms().toString()); //TODO: Chekear el toString()
@@ -163,21 +163,17 @@ public class UI {
 
         int option = 0;
         do{
-            System.out.println("0) Back to Report Menu");
-            System.out.println("1) Back to the Patient Menu");
-            System.out.println("2) Access signal data");
-            System.out.println("3) Add an observation");
+            System.out.println("0) Back to the Patient Menu");
+            System.out.println("1) Access signal data");
+            System.out.println("2) Add an observation");
             option = Utilities.readInteger("Select an option: ");
             switch (option){
                 case 0:
                     return;
                 case 1:
-                    this.patientMenu(report.getPatient());
-                    break;
-                case 2:
                     this.signalMenu(report);
                     break;
-                case 3:
+                case 2:
                     this.addObservationMenu(report);
                     break;
                 default:
@@ -186,6 +182,12 @@ public class UI {
             }
         } while (true);
     }
+
+    private void addObservationMenu(Report report) throws IOException {
+
+    }
+
+
     private void exitMenu(){
 
     }

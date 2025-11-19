@@ -24,87 +24,7 @@ public class Report {
         this.doctorObservation = doctorObservation;
     }
 
-    public Report(Patient patient, LocalDate reportDate, String patientObservation, List<Symptoms> symptoms, String doctorObservation) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.patientObservation = patientObservation;
-        this.symptoms = symptoms;
-        this.doctorObservation = doctorObservation;
 
-    }
-    public Report(Patient patient, LocalDate reportDate, List<Symptoms> symptoms, Set<Signal> signals, String doctorObservation) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.symptoms = symptoms;
-        this.signals = signals;
-        this.doctorObservation = doctorObservation;
-    }
-    public Report(Patient patient, LocalDate reportDate, String patientObservation, Set<Signal> signals, String doctorObservation) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.patientObservation = patientObservation;
-        this.signals = signals;
-        this.doctorObservation = doctorObservation;
-    }
-    public Report(Patient patient, LocalDate reportDate, String patientObservation, String doctorObservation) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.patientObservation = patientObservation;
-        this.doctorObservation = doctorObservation;
-    }
-    public Report(Patient patient, LocalDate reportDate, Set<Signal> signals, String doctorObservation) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.signals = signals;
-        this.doctorObservation = doctorObservation;
-    }
-    public Report(Patient patient, LocalDate reportDate, List<Symptoms> symptoms, String doctorObservation) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.symptoms = symptoms;
-        this.doctorObservation = doctorObservation;
-    }
-    public Report(Patient patient, LocalDate reportDate, String patientObservation, List<Symptoms> symptoms, Set<Signal> signals) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.patientObservation = patientObservation;
-        this.symptoms = symptoms;
-        this.signals = signals;
-    }
-
-    public Report(Patient patient, LocalDate reportDate, String patientObservation, List<Symptoms> symptoms) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.patientObservation = patientObservation;
-        this.symptoms = symptoms;
-    }
-    public Report(Patient patient, LocalDate reportDate, List<Symptoms> symptoms, Set<Signal> signals) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.symptoms = symptoms;
-        this.signals = signals;
-    }
-    public Report(Patient patient, LocalDate reportDate, String patientObservation, Set<Signal> signals) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.patientObservation = patientObservation;
-        this.signals = signals;
-    }
-    public Report(Patient patient, LocalDate reportDate, String patientObservation) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.patientObservation = patientObservation;
-    }
-    public Report(Patient patient, LocalDate reportDate, Set<Signal> signals) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.signals = signals;
-    }
-    public Report(Patient patient, LocalDate reportDate, List<Symptoms> symptoms) {
-        this.patient = patient;
-        this.reportDate = reportDate;
-        this.symptoms = symptoms;
-    }
     public LocalDate getReportDate() {
         return reportDate;
     }
@@ -119,5 +39,41 @@ public class Report {
     }
     public Patient getPatient(){
         return patient;
+    }
+
+    public String getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(String reportId) {
+        this.reportId = reportId;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public void setReportDate(LocalDate reportDate) {
+        this.reportDate = reportDate;
+    }
+
+    public void setPatientObservation(String patientObservation) {
+        this.patientObservation = patientObservation;
+    }
+
+    public void setSignals(Set<Signal> signals) {
+        this.signals = signals;
+    }
+
+    public void setSymptoms(List<Symptoms> symptoms) {
+        this.symptoms = symptoms;
+    }
+
+    public String getDoctorObservation() {
+        return doctorObservation;
+    }
+
+    public void setDoctorObservation(String doctorObservation) {
+        this.doctorObservation = doctorObservation;
     }
 }
