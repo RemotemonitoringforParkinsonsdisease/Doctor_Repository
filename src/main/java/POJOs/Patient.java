@@ -14,6 +14,7 @@ public class Patient extends User {
     public Patient(String email, String fullName, LocalDate dob) {
         super(email, fullName);
         this.dob = dob;
+
     }
     public List<Report> getReports() {
         return reports;

@@ -29,4 +29,12 @@ public class Doctor extends User {
         this.dob = dob;
         this.patients = patients;
     }
+
+    public List<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(List<Patient> patients) {
+        this.patients = patients;
+    }
 }

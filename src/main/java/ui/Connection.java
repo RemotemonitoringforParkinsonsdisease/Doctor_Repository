@@ -19,5 +19,13 @@ public class Connection {
         }
     }
 
+    public SendDataViaNetwork getSendViaNetwork() {
+        return sendDataViaNetwork;
+    }
+
+    public ReceiveDataViaNetwork getReceiveViaNetwork() {
+        return receiveDataViaNetwork;
+    }
+
 
 }

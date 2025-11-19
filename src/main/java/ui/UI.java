@@ -1,9 +1,11 @@
 package ui;
 
+import POJOs.Doctor;
 import POJOs.Patient;
 import POJOs.Report;
 
 import java.io.Console;
+import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.util.List;
@@ -59,23 +61,50 @@ public class UI {
         //Una vez este confirmado
         this.loggedMenu();
     }
-    private void loginMenu(){
-        System.out.println("\nLOGIN MENU");
-        String email = Utilities.readString("Enter your email: ");
-        String password = Utilities.readString("Enter your password: ");
-        //Enviar al servidor los datos para loguear
-        //Se carga el propio doctor
-        //Una vez este confirmado
-        this.loggedMenu();
+    private void loginMenu() throws IOException {
+        System.out.println("\nLOGIN MENU DOCTOR");
+
+        String email;
+        boolean valid;
+        do {
+            email = Utilities.readString("Enter your email: ");
+            valid = Utilities.checkEmail(email);
+
+            if (!valid) {
+                System.out.println("Please follow the email format: example@example.com\n");
+            }
+        } while (!valid);
+        connection.getSendViaNetwork().sendStrings(email);
+
+        String password;
+        do {
+            password = Utilities.readString("Enter your password: ");
+            if (password == null || password.isEmpty()) {
+                System.out.println("Password cannot be empty.\n");
+            }
+        } while (password == null || password.isEmpty());
+        connection.getSendViaNetwork().sendStrings(password);
+
+        String serverResponse = connection.getReceiveViaNetwork().receiveString();
+
+        if (serverResponse.equals("OK")) {
+            System.out.println("Login successful!\n");
+            Doctor loggedDoctor = connection.getReceiveViaNetwork().receiveDoctor();
+            System.out.println("Welcome " + loggedDoctor.getFullName() + "!\n");
+            this.loggedMenu(loggedDoctor);
+        } else {
+            System.out.println("Login failed. Incorrect email or password.\n");
+            loginMenu();
+        }
     }
-    private void loggedMenu(){
+    private void loggedMenu(Doctor doctor) throws IOException {
         System.out.println("\nMAIN MENU");
         int option = 0;
         do{
             System.out.println("1) View Patients\n2) Exit");
             switch (option = Utilities.readInteger("Select an option: ")){
                 case 1:
-                    this.patientListMenu();
+                    this.patientListMenu(doctor);
                     break;
                 case 2:
                     this.exitMenu();
@@ -86,9 +115,9 @@ public class UI {
             }
         } while(true);
     }
-    private void patientListMenu(){
+    private void patientListMenu(Doctor doctor){
         System.out.println("\nPATIENT LIST MENU");
-        List<Patient> patients; //TODO: Cargar pacientes del doctor logueado
+        List<Patient> patients = doctor.getPatients();
         int option = 0;
         do{
             System.out.println("0) Back to Main Menu");
@@ -99,7 +128,7 @@ public class UI {
             if(option == 0){
                 return;
             }
-            if (option <= patients.size() + 1){
+            if (option >= 1 && option <= patients.size()){
                 Patient patient = patients.get(option - 1);
                 this.patientMenu(patient);
             }

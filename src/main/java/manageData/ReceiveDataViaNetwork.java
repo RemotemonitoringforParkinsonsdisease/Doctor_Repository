@@ -76,6 +76,7 @@ public class ReceiveDataViaNetwork {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dob = LocalDate.parse(date, formatter);
         List<Patient> patients = receivePatients();
+
         return  new Doctor(id, email, password, fullName, dob, patients);
     }
 
