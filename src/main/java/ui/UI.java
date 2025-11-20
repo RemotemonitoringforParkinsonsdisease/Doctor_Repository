@@ -1,8 +1,6 @@
 package ui;
 
-import POJOs.Doctor;
-import POJOs.Patient;
-import POJOs.Report;
+import POJOs.*;
 import manageData.ReceiveDataViaNetwork;
 
 import java.io.Console;
@@ -159,14 +157,17 @@ public class UI {
         System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
         System.out.println("Patient Observation: " + report.getPatientObservation());
         System.out.println("Symptoms: " + report.getSymptoms()); //TODO: Chekear el toString()
-
         int option = 0;
         do{
             System.out.println("0) Back to the Patient Menu");
             System.out.println("1) Add an observation");
+            System.out.println("2) See signals");
+            /*
             for(int i = 0 ; i < report.getSignals().size() ; i++){
                 System.out.println(i + 2 + ") Access " + report.getSignals().toString()); //TODO: aqui nos imprimiría todo 2)EDA,EMG,EEG, ACC
             }
+
+             */
 
             option = Utilities.readInteger("Select an option: ");
             switch (option){
@@ -175,28 +176,58 @@ public class UI {
                 case 1:
                     this.addObservationMenu(report);
                     break;
-                default:
-                    if(option >= 2 && option <= report.getSignals().size()+1){
-                        this.signalMenu(report.getSignals().);
-                    }else{
-                        System.out.println("Please select a valid option.\n");
-                        break;
-                    }
 
+                case 2:
+                    this.signalMenu(report);
+                    break;
             }
         } while (true);
     }
-    //Observation
+    //Not clear
     private void signalMenu(Report report) throws IOException {
         System.out.println("\nSIGNAL MENU:  ");
         System.out.println("Select the signal: ");
-        System.out.println("0) Retur: " + report.getSymptoms().toString()); //TODO: Chekear el toString()
-        System.out.println("Signals: " + report.getSignals().toString() + "\n"); //TODO: Chekear el toString()
+        System.out.println("\n1) ECG " +
+                "\n2) EDA " +
+                "\n3) EMG " +
+                "\n4) ACC " +
+                "\n0) Return to Report Menu\n"
+        );
+        int option = Utilities.readInteger("Select an option: ");
+        switch (option){
+            case 0:
+                return;
+            case 1:
+                Signal signalECG = report.getSignalByType(SignalType.ECG);
+                System.out.println(signalECG);
+                System.out.println(signalECG.getSignalValues(signalECG.getSamplingRate()));
+                this.signalMenu(report);
+                break;
+            case 2:
+                Signal signalEDA= report.getSignalByType(SignalType.EDA);
+                System.out.println(signalEDA);
+                System.out.println(signalEDA.getSignalValues(signalEDA.getSamplingRate()));
+                this.signalMenu(report);
+                break;
+            case 3:
+                Signal signalEMG = report.getSignalByType(SignalType.EMG);
+                System.out.println(signalEMG);
+                System.out.println(signalEMG.getSignalValues(signalEMG.getSamplingRate()));
+                this.signalMenu(report);
+                break;
+            case 4:
+                Signal signalACC = report.getSignalByType(SignalType.ACC);
+                System.out.println(signalACC);
+                System.out.println(signalACC.getSignalValues(signalACC.getSamplingRate()));
+                this.signalMenu(report);
+                break;
+        }
 
     }
 
     private void addObservationMenu(Report report) throws IOException {
-
+        String doctorObervation = Utilities.readString("Introduce the observation: ");
+        report.setDoctorObservation(doctorObervation);
     }
 
 

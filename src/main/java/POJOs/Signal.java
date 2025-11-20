@@ -153,13 +153,6 @@ public class Signal {
         return Objects.hash(signalId, signalType, values, samplingRate, signalFilename);
     }
 
-    /**
-     * Adds a list of new signal values to the existing signal.
-     * @param values a list of new signal values to add.
-     */
-    public void addValues(LinkedList<Float> values){
-        this.values.addAll(values);
-    }
     @Override
     public String toString() {
         return  signalType + " " + "[" + samplingRate + " Hz]";

@@ -76,4 +76,13 @@ public class Report {
     public void setDoctorObservation(String doctorObservation) {
         this.doctorObservation = doctorObservation;
     }
+
+    public Signal getSignalByType(SignalType signalType){
+        for(Signal signal : signals){
+            if(signal.getSignalType() ==  signalType){
+                return signal;
+            }
+        }
+        return null;
+    }
 }
