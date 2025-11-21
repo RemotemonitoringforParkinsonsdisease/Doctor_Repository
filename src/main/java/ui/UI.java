@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UI {
 
@@ -17,7 +19,6 @@ public class UI {
         UI ui = new UI();
         //TODO: Excepciones
         ui.startConnection();
-        ui.preLoggedMenu();
     }
 
     private void startConnection() throws IOException{ //TODO: Iterar hasta conexión correcta
@@ -25,6 +26,12 @@ public class UI {
         String ipAddress = Utilities.readString("IP Address: ");
         int port = Utilities.readInteger("Port: ");
         this.connection = new Connection(ipAddress, port);
+        connection.getSendViaNetwork().sendInt(2);
+        String message = connection.getReceiveViaNetwork().receiveString();
+        System.out.println(message);
+        if(message == "DOCTOR"){
+            this.preLoggedMenu();
+        }
     }
 
     private void preLoggedMenu() throws IOException {
@@ -34,11 +41,17 @@ public class UI {
             System.out.println("1) Login\n2) Register\n3) Exit");
             option = Utilities.readInteger("Select an option: ");
             switch (option){
-                case 1: this.loginMenu();
+                case 1:
+                    connection.getSendViaNetwork().sendInt(1);
+                    this.loginMenu();
                     break;
-                case 2: this.registerMenu();
+                case 2:
+                    connection.getSendViaNetwork().sendInt(2);
+                    this.registerMenu();
                     break;
-                case 3: this.exitMenu();
+                case 3:
+                    connection.getSendViaNetwork().sendInt(3);
+                    this.exitMenu();
                     break;
                 default:
                     System.out.println("Please select a valid option.\n");
@@ -228,9 +241,9 @@ public class UI {
         report.setDoctorObservation(doctorObervation);
     }
 
-
     private void exitMenu(){
-
+        System.out.println("Exiting Doctor Application");
+        connection.releaseResources();
     }
 
 }
