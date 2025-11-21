@@ -1,34 +1,29 @@
 package POJOs;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.LinkedList;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class Signal {
-    private String signalId;
+    private Integer signalId;
     private SignalType signalType;
-    private List<Float> values;
-    private final int samplingRate = 100;
-    private String signalFilename;
+    private List<Integer> values;
+    private  int samplingRate;
 
-
-    public Signal(SignalType signalType, String signalId){
-        this.values = new LinkedList<>();
+    public Signal(Integer signalId, SignalType signalType, List<Integer> values) {
         this.signalId = signalId;
         this.signalType = signalType;
+        this.values = values;
     }
 
-    public String getSignalId() {
+
+    public Integer getSignalId() {
         return signalId;
     }
 
-    public void setSignalId(String signalId) {
+    public void setSignalId(Integer signalId) {
         this.signalId = signalId;
     }
 
@@ -40,75 +35,36 @@ public class Signal {
         this.signalType = signalType;
     }
 
-    public List<Float> getValues() {
+    public List<Integer> getValues() {
         return values;
     }
 
-    public void setValues(List<Float> values) {
+    public void setValues(List<Integer> values) {
         this.values = values;
     }
 
     public int getSamplingRate() {
         return samplingRate;
     }
-    public void storeSignalInFile() {
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        String ruta=null;
-        try {
-            if(this.signalType==SignalType.EDA) {
-                ruta = "MeasurementsEDA\\" + signalFilename;
 
-            }else{
-                if(this.signalType==SignalType.EMG) {
-                    ruta = "MeasurementsEMG\\" + signalFilename;
-                }else{
-                    if(this.signalType==SignalType.ECG) {
-                        ruta = "MeasurementsECG\\" + signalFilename;
-                    }else{
-                        if(this.signalType==SignalType.ACC) {
-                            ruta = "MeasurementsACC\\" + signalFilename;
-                        }
-                    }
-
-                }
-            }
-            String contenido = getSignalValues(samplingRate).toString();
-            File file = new File(ruta);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            fw = new FileWriter(file);
-            bw = new BufferedWriter(fw);
-            bw.write(contenido);
-
-        } catch (IOException ex) {
-            Logger.getLogger(Signal.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                bw.close();
-                fw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Signal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public void setSamplingRate(int samplingRate) {
+        this.samplingRate = samplingRate;
     }
 
 
-    public LinkedList<Float> getSignalValues(int samplingRate) {
-        LinkedList<Float> result = new LinkedList<>();
+    public ArrayList<Integer> getSignalValues(int samplingRate) {
+        ArrayList<Integer> result = new ArrayList<>();
         for (int j = 0; j < samplingRate; j++) {
             int blockSize = samplingRate;
-            // Si necesitas esta información visual, puedes guardarla en otro lugar.
             for (int i = 0; i < blockSize; i++) {
                 int value = j * blockSize + i;
-                result.add(values.get(value));  // Agregar los valores a la lista.
+                result.add(values.get(value));
             }
         }
         return result;
     }
 
-    public String floatValuesToString() {
+    public String intValuesToString() {
         StringBuilder message = new StringBuilder();
         String separator = " ";
 
@@ -118,19 +74,18 @@ public class Signal {
                 message.append(separator);
             }
         }
-
         return message.toString();
     }
 
 
-    public List<Float> stringToFloatValues(String str) {
+    public List<Integer> stringToIntValues(String str) {
         values.clear(); // Limpiamos la lista antes de agregar nuevos valores.
         String[] tokens = str.split(" "); // Dividimos el String por el espacio.
         int size = tokens.length;
         if(size>2) {
             for (int i = 0; i < size; i++) {
                 try {
-                    values.add(Float.parseFloat(tokens[i])); // Convertimos cada fragmento a Float y lo agregamos a la LinkedList.
+                    values.add(Integer.parseInt(tokens[i])); // Convertimos cada fragmento a Integer y lo agregamos a la ArrayList.
                 } catch (NumberFormatException e) {
                     // Manejo de error si algún valor no es un Integer válido.
                     System.out.println("Error al convertir el valor: " + tokens[i]);
@@ -145,17 +100,19 @@ public class Signal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Signal signal = (Signal) o;
-        return samplingRate == signal.samplingRate && Objects.equals(signalId, signal.signalId) && signalType == signal.signalType && Objects.equals(values, signal.values) && Objects.equals(signalFilename, signal.signalFilename);
+        return samplingRate == signal.samplingRate && Objects.equals(signalId, signal.signalId) && signalType == signal.signalType && Objects.equals(values, signal.values);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(signalId, signalType, values, samplingRate, signalFilename);
+        return Objects.hash(signalId, signalType, values, samplingRate);
     }
 
     @Override
     public String toString() {
         return  signalType + " " + "[" + samplingRate + " Hz]";
     }
+
+
 
 }

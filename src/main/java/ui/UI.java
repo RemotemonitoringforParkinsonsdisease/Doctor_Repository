@@ -14,21 +14,19 @@ public class UI {
     private Connection connection;
 
     public static void main(String[] args) throws IOException {
-
         UI ui = new UI();
         //TODO: Excepciones
-        //TODO: Ver si salir o volver al menu anterior
         ui.startConnection();
         ui.preLoggedMenu();
-
-
     }
+
     private void startConnection() throws IOException{ //TODO: Iterar hasta conexión correcta
         System.out.println("Select IP Address and Port to connect to :");
         String ipAddress = Utilities.readString("IP Address: ");
         int port = Utilities.readInteger("Port: ");
         this.connection = new Connection(ipAddress, port);
     }
+
     private void preLoggedMenu() throws IOException {
         System.out.println("WELCOME TO THE DOCTOR APPLICATION\n\n");
         int option = 0;

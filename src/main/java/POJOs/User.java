@@ -1,11 +1,11 @@
 package POJOs;
 
 public class User {
-    private String id;
+    private Integer id;
     private String email;
     private String fullName;
 
-    public User(String id, String email, String fullName) {
+    public User(Integer id, String email, String fullName) {
         this.id = id;
         this.email = email;
         this.fullName = fullName;
@@ -22,7 +22,7 @@ public class User {
         return fullName;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 

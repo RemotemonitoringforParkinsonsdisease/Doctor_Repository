@@ -2,21 +2,27 @@ package POJOs;
 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-public class Patient extends User {
-    private List<Report> reports;
+
+public class Patient  {
+    private Integer patientId;
     private LocalDate dob;
+    private List<Report> reports;
 
-    //Constructor para recibir un paciente del server, al recibir x pacientes se llamara x veces
-    public Patient(String id, String email, String fullName, LocalDate dob) {
-        super(id, email, fullName);
+    public Patient(Integer patientId, LocalDate dob, List<Report> reports) {
+        this.patientId = patientId;
         this.dob = dob;
+        this.reports = reports;
     }
 
+    public Integer getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Integer patientId) {
+        this.patientId = patientId;
+    }
 
     public LocalDate getDob() {
         return dob;
@@ -32,9 +38,5 @@ public class Patient extends User {
 
     public void setReports(List<Report> reports) {
         this.reports = reports;
-    }
-
-    public String getFullName() {
-        return super.getFullName();
     }
 }
