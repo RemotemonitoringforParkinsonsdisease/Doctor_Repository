@@ -9,11 +9,18 @@ public class Patient  {
     private Integer patientId;
     private LocalDate dob;
     private List<Report> reports;
+    private String fullName;
 
-    public Patient(Integer patientId, LocalDate dob, List<Report> reports) {
+    public Patient(Integer patientId, LocalDate dob, List<Report> reports, String fullName) {
         this.patientId = patientId;
         this.dob = dob;
         this.reports = reports;
+        this.fullName = fullName;
+    }
+    public Patient(Integer patientId, LocalDate dob, String fullName) {
+        this.patientId = patientId;
+        this.dob = dob;
+        this.fullName = fullName;
     }
 
     public Integer getPatientId() {
@@ -38,5 +45,11 @@ public class Patient  {
 
     public void setReports(List<Report> reports) {
         this.reports = reports;
+    }
+    public String getFullName() {
+        return fullName;
+    }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

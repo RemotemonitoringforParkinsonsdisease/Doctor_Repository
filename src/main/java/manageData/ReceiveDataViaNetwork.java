@@ -31,17 +31,22 @@ public class ReceiveDataViaNetwork {
         return dataInputStream.readUTF();
     }
 
+    public User receiveUser() throws IOException{
+        Integer userId = dataInputStream.readInt();
+        String email = dataInputStream.readUTF();
+        return new User(userId, email);
+    }
+
 
     public Patient recievePatient(){
         Patient patient = null;
         try {
-            String id = dataInputStream.readUTF();
-            String fullName = dataInputStream.readUTF();
+            Integer patientId = dataInputStream.readInt();
             String date = dataInputStream.readUTF();
-            String email = dataInputStream.readUTF();
+            String fullName = dataInputStream.readUTF();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate dob = LocalDate.parse(date, formatter);
-            patient = new Patient(id, email, fullName, dob);
+            patient = new Patient(patientId, dob, fullName);
         } catch (EOFException ex) {
             System.out.println("Todos los datos fueron leídos correctamente.");
         } catch (IOException ex) {
@@ -75,36 +80,43 @@ public class ReceiveDataViaNetwork {
     public Report receiveReport() throws IOException{
         Report report = null;
         try {
-            String reportId = dataInputStream.readUTF();
-            Patient patient = recievePatient();
+            Integer reportId = dataInputStream.readInt();
+            Integer patientId = dataInputStream.readInt();
             String date = dataInputStream.readUTF();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate dateReport = LocalDate.parse(date, formatter);
+            List<Signal> signals = receiveSignals();
+            List<Symptoms> symptoms = receiveSymptoms();
             String patientObservation = dataInputStream.readUTF();
             String doctorObservation = dataInputStream.readUTF();
-            List<Symptoms> symptoms = receiveSymptoms();
-            Set<Signal> signals = receiveSignals();
 
-            report = new Report(reportId, patient, dateReport, patientObservation, symptoms, signals, doctorObservation);
+
+
+            report = new Report(reportId, patientId, dateReport, patientObservation, doctorObservation);
+            report.setSignals(signals);
+            report.setSymptoms(symptoms);
+            report.setPatientObservation(patientObservation);
+            //TODO: Pensar como gestionar casos de recibir parámetros nulos
+
         } catch (IOException e) {
             System.err.println("Error al leer el flujo de entrada: " + e.getMessage());
         }
         return report;
     }
 
-    public Set<Signal> receiveSignals() throws IOException{
-        Set<Signal> signals = new HashSet<>();
+    public List<Signal> receiveSignals() throws IOException{
+        List<Signal> signals = new ArrayList<>();
         try {
             int numSignals = dataInputStream.readInt();
 
             for (int i = 0; i < numSignals; i++) {
                 String typeSignal = dataInputStream.readUTF();
                 SignalType type = SignalType.valueOf(typeSignal);
-                String signalId = dataInputStream.readUTF();
+                Integer signalId = dataInputStream.readInt();
                 String valuesString = dataInputStream.readUTF();
-                Signal signal = new Signal(type, signalId);
+                Signal signal = new Signal(signalId, type);
                 //Esto recibe la lista completa de valores de la señal
-                signal.stringToFloatValues(valuesString);
+                signal.stringToIntValues(valuesString);
                 signals.add(signal);
             }
             return signals;
@@ -128,17 +140,20 @@ public class ReceiveDataViaNetwork {
         return symptoms;
     }
 
+    //Integer doctorId, String doctorPassword, LocalDate dob, String fullName
     public Doctor receiveDoctor() throws IOException{
-        String id = dataInputStream.readUTF();
-        String email = dataInputStream.readUTF();
-        String fullName = dataInputStream.readUTF();
-        String password = dataInputStream.readUTF();
+        Integer doctorId = dataInputStream.readInt();
+        String doctorPassword = dataInputStream.readUTF();
+        Integer patientId = dataInputStream.readInt();
         String date = dataInputStream.readUTF();
+        String fullName = dataInputStream.readUTF();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dob = LocalDate.parse(date, formatter);
-        List<Patient> patients = receivePatients();
 
-        return  new Doctor(id, email, password, fullName, dob, patients);
+        Doctor doctor = new Doctor(doctorId, doctorPassword, dob, fullName);
+        List<Patient> patients = receivePatients(); //Lo hago por separado para que se cree el doctor aunque falle un paciente
+        doctor.setPatients(patients);
+        return doctor;
     }
 
     public int receiveInt() {

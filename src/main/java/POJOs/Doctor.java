@@ -10,14 +10,28 @@ public class Doctor {
     private String doctorPassword; //TODO: Encriptar;
     private LocalDate dob;
     private List<Patient> patients;
+    private String fullName;
 
-    public Doctor(Integer userId, Integer doctorId, String doctorPassword, LocalDate dob, List<Patient> patients) {
+    public Doctor(Integer userId, Integer doctorId, String doctorPassword, LocalDate dob, List<Patient> patients, String fullName) {
         this.userId = userId;
         this.doctorId = doctorId;
         this.doctorPassword = doctorPassword;
         this.dob = dob;
         this.patients = patients;
-
+        this.fullName = fullName;
+    }
+    public Doctor(Integer doctorId, String doctorPassword, LocalDate dob, String fullName) {
+        this.doctorId = doctorId;
+        this.doctorPassword = doctorPassword;
+        this.dob = dob;
+        this.fullName = fullName;
+    }
+    public Doctor(Integer userId, Integer doctorId, String doctorPassword, LocalDate dob, String fullName) {
+        this.userId = userId;
+        this.doctorId = doctorId;
+        this.doctorPassword = doctorPassword;
+        this.dob = dob;
+        this.fullName = fullName;
     }
 
 
@@ -60,5 +74,13 @@ public class Doctor {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

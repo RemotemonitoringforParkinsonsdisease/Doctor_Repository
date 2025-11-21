@@ -29,7 +29,7 @@ public class UI {
         connection.getSendViaNetwork().sendInt(2);
         String message = connection.getReceiveViaNetwork().receiveString();
         System.out.println(message);
-        if(message == "DOCTOR"){
+        if(message.equals("DOCTOR")){
             this.preLoggedMenu();
         }
     }
@@ -145,8 +145,8 @@ public class UI {
             System.out.println("Please select a valid option.\n");
         } while(true);
     }
-    private void patientMenu(Patient patient) throws IOException {
-        connection.getSendViaNetwork().sendStrings(patient.getId());//Se manda el id del paciente al server
+    private void patientMenu(Patient patient) throws IOException { //Este menu es redundante
+        connection.getSendViaNetwork().sendInt(patient.getPatientId());//Se manda el id del paciente al server
         patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient(patient));//Se recibe los records de dicho patient
         System.out.println("\nPATIENT MENU: " + patient.getFullName());
         int option = 0;
@@ -236,14 +236,46 @@ public class UI {
 
     }
 
+    /* //---------------ALTERNATIVA A reportMenu() + signalMenu() juntos ----------------
+
+
+    private void reportMenu(Report report) throws IOException {
+        System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
+        System.out.println("Patient Observation: " + report.getPatientObservation());
+        System.out.println("Symptoms: " + report.getSymptoms());
+        int option = 0;
+        do{
+            System.out.println("0) Back to the Patient Menu");
+            System.out.println("1) Add an observation");
+            for(int i = 0 ; i < report.getSignals().size() ; i++){
+                System.out.println(i + 2 + ") Access " + report.getSignals().toString());
+                option = Utilities.readInteger("Select an option: ");
+                if(option == 0){
+                    return;
+                }
+                if (option == 1){
+                    this.addObservationMenu(report);
+                }
+                if (option >= 2 && option <= report.getSignals().size() + 2){
+                    //Lo que nos apetezca hacer cuando se eliga una señal, printearla por ejemplo
+                }
+            }
+
+        } while(true);
+    }*/
+
+
+
     private void addObservationMenu(Report report) throws IOException {
         String doctorObervation = Utilities.readString("Introduce the observation: ");
         report.setDoctorObservation(doctorObervation);
+        connection.getSendViaNetwork().sendStrings(doctorObervation);
     }
 
     private void exitMenu(){
         System.out.println("Exiting Doctor Application");
-        connection.releaseResources();
+        connection.releaseResources(); //Alomejor deberíamos envíar algo de feedback al server
+        System.exit(0);
     }
 
 }
