@@ -43,15 +43,15 @@ public class UI {
             option = Utilities.readInteger("Select an option: ");
             switch (option){
                 case 1:
-                    connection.getSendViaNetwork().sendInt(1);
-                    this.loginMenu();
-                    break;
-                case 2:
-                    connection.getSendViaNetwork().sendInt(2);
+                    connection.getSendViaNetwork().sendInt(option);
                     this.registerMenu();
                     break;
+                case 2:
+                    connection.getSendViaNetwork().sendInt(option);
+                    this.loginMenu();
+                    break;
                 case 3:
-                    connection.getSendViaNetwork().sendInt(3);
+                    connection.getSendViaNetwork().sendInt(option);
                     this.exitMenu();
                     break;
                 default:
@@ -78,10 +78,7 @@ public class UI {
                 String password = Utilities.readString("Enter your password: ");
                 Doctor preDoctor = new Doctor(fullName, password, dob);
                 connection.getSendViaNetwork().sendRegisteredDoctor(preDoctor);
-            /*
-            Doctor doctor = connection.getReceiveViaNetwork().receiveNewDoctor();
-            connection.getSendViaNetwork().sendStrings("DOCTOR REGISTERED");
-             */
+
             } else if (message.equals("EMAIL ERROR")) {
                 System.out.println("This email is already associated with a doctor");
             }
@@ -122,8 +119,10 @@ public class UI {
                     System.out.println("Login failed. Incorrect email or password.\n");
                     loginMenu();
                 }
+            }else {
+                System.out.println(emailVerification);
+                return;
             }
-
         }while (true);
     }
     private void loggedMenu(Doctor doctor) throws IOException {

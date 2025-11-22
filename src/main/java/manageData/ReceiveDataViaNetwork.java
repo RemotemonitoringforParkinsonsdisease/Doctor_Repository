@@ -46,7 +46,7 @@ public class ReceiveDataViaNetwork {
             String fullName = dataInputStream.readUTF();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate dob = LocalDate.parse(date, formatter);
-            patient = new Patient(patientId, dob, fullName);
+            patient = new Patient(patientId,fullName, dob);
         } catch (EOFException ex) {
             System.out.println("Todos los datos fueron leídos correctamente.");
         } catch (IOException ex) {
@@ -140,7 +140,7 @@ public class ReceiveDataViaNetwork {
         return symptoms;
     }
 
-    //Integer doctorId, String doctorPassword, LocalDate dob, String fullName
+    //Doctor Log in
     public Doctor receiveDoctor() throws IOException{
         Integer userId = dataInputStream.readInt();
         Integer doctorId = dataInputStream.readInt();

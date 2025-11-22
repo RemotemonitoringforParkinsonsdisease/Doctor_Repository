@@ -17,7 +17,7 @@ public class Patient  {
         this.reports = reports;
         this.fullName = fullName;
     }
-    public Patient(Integer patientId, LocalDate dob, String fullName) {
+    public Patient(Integer patientId, String fullName, LocalDate dob) {
         this.patientId = patientId;
         this.dob = dob;
         this.fullName = fullName;
