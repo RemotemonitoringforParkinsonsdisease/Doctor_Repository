@@ -144,7 +144,6 @@ public class ReceiveDataViaNetwork {
     public Doctor receiveDoctor() throws IOException{
         Integer doctorId = dataInputStream.readInt();
         String doctorPassword = dataInputStream.readUTF();
-        Integer patientId = dataInputStream.readInt();
         String date = dataInputStream.readUTF();
         String fullName = dataInputStream.readUTF();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
