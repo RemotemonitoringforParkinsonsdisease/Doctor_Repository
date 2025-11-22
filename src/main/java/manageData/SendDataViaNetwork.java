@@ -34,8 +34,10 @@ public class SendDataViaNetwork {
     }
 
 
-    public void sendDoctor(Doctor doctor) throws IOException{
-
+    public void sendRegisteredDoctor(Doctor doctor) throws IOException{
+        dataOutputStream.writeUTF(doctor.getFullName());
+        dataOutputStream.writeUTF(doctor.getDoctorPassword());
+        dataOutputStream.writeUTF(doctor.getDob().toString());
     }
 
     public void sendPatient(Patient patient) throws IOException{

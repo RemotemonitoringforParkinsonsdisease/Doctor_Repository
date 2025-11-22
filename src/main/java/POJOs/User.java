@@ -8,10 +8,10 @@ public class User {
         this.id = id;
         this.email = email;
     }
-
     public User(String email) {
         this.email = email;
     }
+
 
     public Integer getId() {
         return id;

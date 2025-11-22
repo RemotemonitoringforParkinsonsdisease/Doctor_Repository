@@ -142,16 +142,28 @@ public class ReceiveDataViaNetwork {
 
     //Integer doctorId, String doctorPassword, LocalDate dob, String fullName
     public Doctor receiveDoctor() throws IOException{
+        Integer userId = dataInputStream.readInt();
         Integer doctorId = dataInputStream.readInt();
+        String fullName = dataInputStream.readUTF();
         String doctorPassword = dataInputStream.readUTF();
         String date = dataInputStream.readUTF();
-        String fullName = dataInputStream.readUTF();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dob = LocalDate.parse(date, formatter);
-
-        Doctor doctor = new Doctor(doctorId, doctorPassword, dob, fullName);
+        Doctor doctor = new Doctor(userId, doctorId, fullName, doctorPassword,dob);
         List<Patient> patients = receivePatients(); //Lo hago por separado para que se cree el doctor aunque falle un paciente
         doctor.setPatients(patients);
+        return doctor;
+    }
+
+    public Doctor receiveNewDoctor() throws IOException{
+        Integer userId = dataInputStream.readInt();
+        Integer doctorId = dataInputStream.readInt();
+        String fullName = dataInputStream.readUTF();
+        String doctorPassword = dataInputStream.readUTF();
+        String date = dataInputStream.readUTF();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dob = LocalDate.parse(date, formatter);
+        Doctor doctor = new Doctor(userId, doctorId, fullName, doctorPassword, dob);
         return doctor;
     }
 

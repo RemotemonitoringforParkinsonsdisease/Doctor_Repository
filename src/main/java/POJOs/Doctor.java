@@ -1,40 +1,41 @@
 package POJOs;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Doctor {
+    private String fullName;
     private Integer userId;
     private Integer doctorId;
     private String doctorPassword; //TODO: Encriptar;
     private LocalDate dob;
     private List<Patient> patients;
-    private String fullName;
 
-    public Doctor(Integer userId, Integer doctorId, String doctorPassword, LocalDate dob, List<Patient> patients, String fullName) {
+
+    public Doctor(Integer userId, Integer doctorId, String fullName, String doctorPassword, LocalDate dob, List<Patient> patients) {
         this.userId = userId;
         this.doctorId = doctorId;
+        this.fullName = fullName;
         this.doctorPassword = doctorPassword;
         this.dob = dob;
         this.patients = patients;
-        this.fullName = fullName;
     }
-    public Doctor(Integer doctorId, String doctorPassword, LocalDate dob, String fullName) {
+    public Doctor(Integer userID, Integer doctorId, String fullName , String doctorPassword, LocalDate dob) {
+        this.userId = userID;
         this.doctorId = doctorId;
+        this.fullName = fullName;
         this.doctorPassword = doctorPassword;
         this.dob = dob;
-        this.fullName = fullName;
+        this.patients = new ArrayList<Patient>();
     }
-    public Doctor(Integer userId, Integer doctorId, String doctorPassword, LocalDate dob, String fullName) {
-        this.userId = userId;
-        this.doctorId = doctorId;
+
+public Doctor(String fullName , String doctorPassword, LocalDate dob) {
+        this.fullName = fullName;
         this.doctorPassword = doctorPassword;
         this.dob = dob;
-        this.fullName = fullName;
-    }
-
-
+}
 
     public Integer getDoctorId() {
         return doctorId;

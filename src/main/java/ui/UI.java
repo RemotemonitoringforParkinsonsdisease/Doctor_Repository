@@ -3,6 +3,7 @@ package ui;
 import POJOs.*;
 import manageData.ReceiveDataViaNetwork;
 
+import javax.print.Doc;
 import java.io.Console;
 import java.io.IOException;
 import java.net.Socket;
@@ -35,9 +36,9 @@ public class UI {
     }
 
     private void preLoggedMenu() throws IOException {
-        System.out.println("WELCOME TO THE DOCTOR APPLICATION\n\n");
-        int option = 0;
         do {
+            int option = 0;
+            System.out.println("WELCOME TO THE DOCTOR APPLICATION\n\n");
             System.out.println("1) Login\n2) Register\n3) Exit");
             option = Utilities.readInteger("Select an option: ");
             switch (option){
@@ -61,51 +62,69 @@ public class UI {
 
     }
     private void registerMenu() throws IOException {
-        System.out.println("\nREGISTER MENU");
-        String fullName = Utilities.readString("Enter your full name: ");
-        LocalDate dob = Utilities.readDate("Enter your DOB: ");
-        String email = Utilities.readString("Enter your email: ");
-        String password = Utilities.readString("Enter your password: ");
-        //Enviar al servidor los datos para registrar
-        //Se carga el propio doctor y sus pacientes
-        //Una vez este confirmado
-        //this.loggedMenu(); TODO crearlo
+        do {
+            System.out.println("\nREGISTER DOCTOR MENU");
+            boolean valid;
+            String email;
+            do {
+                email = Utilities.readString("Enter your email: ");
+                valid = Utilities.checkEmail(email);
+            }while(!valid);
+            connection.getSendViaNetwork().sendStrings(email); //le mando el email al servidor para que lo compruebe
+            String message = connection.getReceiveViaNetwork().receiveString(); //Recibo un mensaje del servidor
+            if (message.equals("EMAIL OK")) {
+                String fullName = Utilities.readString("Enter your full name: ");
+                LocalDate dob = Utilities.readDate("Enter your DOB: ");
+                String password = Utilities.readString("Enter your password: ");
+                Doctor preDoctor = new Doctor(fullName, password, dob);
+                connection.getSendViaNetwork().sendRegisteredDoctor(preDoctor);
+            /*
+            Doctor doctor = connection.getReceiveViaNetwork().receiveNewDoctor();
+            connection.getSendViaNetwork().sendStrings("DOCTOR REGISTERED");
+             */
+            } else if (message.equals("EMAIL ERROR")) {
+                System.out.println("This email is already associated with a doctor");
+            }
+        }while(true);
     }
     private void loginMenu() throws IOException {
-        System.out.println("\nLOGIN MENU DOCTOR");
-
-        String email;
-        boolean valid;
         do {
-            email = Utilities.readString("Enter your email: ");
-            valid = Utilities.checkEmail(email);
+            System.out.println("\nLOGIN MENU DOCTOR");
+            String email;
+            boolean valid;
+            do {
+                email = Utilities.readString("Enter your email: ");
+                valid = Utilities.checkEmail(email);
 
-            if (!valid) {
-                System.out.println("Please follow the email format: example@example.com\n");
+            } while (!valid);
+
+            connection.getSendViaNetwork().sendStrings(email);
+            String emailVerification = connection.getReceiveViaNetwork().receiveString();
+
+            if (emailVerification.equals("EMAIL OK")) {
+                String password;
+                do {
+                    password = Utilities.readString("Enter your password: ");
+                    if (password == null || password.isEmpty()) {
+                        System.out.println("Password cannot be empty.\n");
+                    }
+                } while (password == null || password.isEmpty());
+
+                connection.getSendViaNetwork().sendStrings(password);
+                String passwordVerification = connection.getReceiveViaNetwork().receiveString();
+
+                if (passwordVerification.equals("PASSWORD OK")) {
+                    System.out.println("Login successful!\n");
+                    Doctor loggedDoctor = connection.getReceiveViaNetwork().receiveDoctor();
+                    System.out.println("Welcome " + loggedDoctor.getFullName() + "!\n");
+                    this.loggedMenu(loggedDoctor);
+                } else {
+                    System.out.println("Login failed. Incorrect email or password.\n");
+                    loginMenu();
+                }
             }
-        } while (!valid);
-        connection.getSendViaNetwork().sendStrings(email);
 
-        String password;
-        do {
-            password = Utilities.readString("Enter your password: ");
-            if (password == null || password.isEmpty()) {
-                System.out.println("Password cannot be empty.\n");
-            }
-        } while (password == null || password.isEmpty());
-        connection.getSendViaNetwork().sendStrings(password);
-
-        String serverResponse = connection.getReceiveViaNetwork().receiveString();
-
-        if (serverResponse.equals("OK")) {
-            System.out.println("Login successful!\n");
-            Doctor loggedDoctor = connection.getReceiveViaNetwork().receiveDoctor();
-            System.out.println("Welcome " + loggedDoctor.getFullName() + "!\n");
-            this.loggedMenu(loggedDoctor);
-        } else {
-            System.out.println("Login failed. Incorrect email or password.\n");
-            loginMenu();
-        }
+        }while (true);
     }
     private void loggedMenu(Doctor doctor) throws IOException {
         System.out.println("\nMAIN MENU");
@@ -113,9 +132,13 @@ public class UI {
         do{
             System.out.println("1) View Patients\n2) Exit");
             switch (option = Utilities.readInteger("Select an option: ")){
-                case 1:
+                case 1:if(doctor.getPatients() == null){
+                    System.out.println("There are no patients assigned yet.\n");
+                }else{
                     this.patientListMenu(doctor);
                     break;
+                }
+
                 case 2:
                     this.exitMenu();
                     break;
