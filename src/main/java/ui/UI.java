@@ -112,9 +112,7 @@ public class UI {
 
                 if (passwordVerification.equals("PASSWORD OK")) {
                     System.out.println("Login successful!\n");
-                    Doctor loggedDoctor = connection.getReceiveViaNetwork().receiveDoctor();
-                    System.out.println("Welcome " + loggedDoctor.getFullName() + "!\n");
-                    this.loggedMenu(loggedDoctor);
+                    this.loggedMenu();
                 } else {
                     System.out.println("Login failed. Incorrect email or password.\n");
                     loginMenu();
@@ -125,8 +123,10 @@ public class UI {
             }
         }while (true);
     }
-    private void loggedMenu(Doctor doctor) throws IOException {
-        System.out.println("\nMAIN MENU");
+    private void loggedMenu() throws IOException {
+        Doctor doctor = connection.getReceiveViaNetwork().receiveDoctor();
+        System.out.println("Welcome " + doctor.getFullName() + "!\n");
+        System.out.println("\nMAIN DOCTOR MENU");
         int option = 0;
         do{
             System.out.println("1) View Patients\n2) Exit");
