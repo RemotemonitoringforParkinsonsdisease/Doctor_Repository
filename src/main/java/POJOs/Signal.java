@@ -118,6 +118,4 @@ public class Signal {
         return  signalType + " " + "[" + samplingRate + " Hz]";
     }
 
-
-
 }
