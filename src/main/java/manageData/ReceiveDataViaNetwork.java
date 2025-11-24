@@ -67,11 +67,19 @@ public class ReceiveDataViaNetwork {
 
     //TODO: Ver como implementamos la recepción para todos los casos de Report
 
-    public List<Report> receiveReportsOfAPatient() throws IOException{
-        int numReports = dataInputStream.readInt();
-        List<Report> reports = new ArrayList<Report>();
-        for (int i = 0; i < numReports; i++) {
-            reports.add(receiveReport());
+    public List<Report> receiveReportsOfAPatient() {
+        List<Report> reports = new ArrayList<>();
+        try {
+            int numberOfReports = dataInputStream.readInt();
+            if (numberOfReports == 0) {
+                return reports; //devolvemos lista vacía sin intentar leer nada
+            }
+            for (int i = 0; i < numberOfReports; i++) {
+                reports.add(receiveReport());
+            }
+            return reports;
+        } catch (IOException e){
+            System.err.println("Error al leer el flujo de entrada: " + e.getMessage());
         }
         return reports;
     }
@@ -79,25 +87,19 @@ public class ReceiveDataViaNetwork {
 
     public Report receiveReport() throws IOException{
         Report report = null;
+
         try {
             Integer reportId = dataInputStream.readInt();
             Integer patientId = dataInputStream.readInt();
             String date = dataInputStream.readUTF();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate dateReport = LocalDate.parse(date, formatter);
-            List<Symptoms> symptoms = receiveSymptoms();
+            LocalDate reportDate = LocalDate.parse(date, formatter);
             List<Signal> signals = receiveSignals();
+            List<Symptoms> symptoms = receiveSymptoms();
             String patientObservation = dataInputStream.readUTF();
             String doctorObservation = dataInputStream.readUTF();
 
-
-
-            report = new Report(reportId, patientId, dateReport, patientObservation, doctorObservation);
-            report.setSignals(signals);
-            report.setSymptoms(symptoms);
-            report.setPatientObservation(patientObservation);
-            //TODO: Pensar como gestionar casos de recibir parámetros nulos
-
+            report = new Report(reportId, patientId, reportDate, signals, symptoms, patientObservation, doctorObservation);
         } catch (IOException e) {
             System.err.println("Error al leer el flujo de entrada: " + e.getMessage());
         }
@@ -189,5 +191,4 @@ public class ReceiveDataViaNetwork {
             e.printStackTrace();
         }
     }
-
 }
