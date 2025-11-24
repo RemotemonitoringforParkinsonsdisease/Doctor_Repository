@@ -127,46 +127,21 @@ public class UI {
         Doctor doctor = connection.getReceiveViaNetwork().receiveDoctor();
         System.out.println("Welcome " + doctor.getFullName() + "!\n");
         System.out.println("\nMAIN DOCTOR MENU");
-        int option = 0;
         do{
-            System.out.println("1) View Patients\n2) Exit");
-            switch (option = Utilities.readInteger("Select an option: ")){
-                case 1:if(doctor.getPatients() == null){
-                    System.out.println("There are no patients assigned yet.\n");
-                }else{
-                    this.patientListMenu(doctor);
-                    break;
-                }
-
-                case 2:
-                    this.exitMenu();
-                    break;
-                default:
-                    System.out.println("Please select a valid option.\n");
-                    break;
+            System.out.println("0) Exit");
+            for(int i = 1; i <= doctor.getPatients().size(); i++){
+                System.out.println(i+")"+doctor.getPatients().get(i).getFullName());
             }
-        } while(true);
-    }
-    private void patientListMenu(Doctor doctor) throws IOException{
-        System.out.println("\nPATIENT LIST MENU");
-        List<Patient> patients = doctor.getPatients();
-        int option = 0;
-        do{
-            System.out.println("0) Back to Main Menu");
-            for(int i = 0; i < patients.size(); i++){
-                System.out.println((i+1) + ") " + patients.get(i).getFullName());
-            }
-            option = Utilities.readInteger("Select a patient: ");
+            int option = Utilities.readInteger("Select an option: ");
             if(option == 0){
-                return;
-            }
-            if (option >= 1 && option <= patients.size()){
-                Patient patient = patients.get(option - 1);
-                this.patientMenu(patient);
-            }
-            System.out.println("Please select a valid option.\n");
+               this.exitMenu();
+            }else if(option >= 1 && option <= doctor.getPatients().size()){
+                this.patientMenu(doctor.getPatients().get(option - 1));
+            }else System.out.println("Please select a valid option.\n");
         } while(true);
     }
+
+
     private void patientMenu(Patient patient) throws IOException { //Este menu es redundante
         connection.getSendViaNetwork().sendInt(patient.getPatientId());//Se manda el id del paciente al server
         patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient(patient));//Se recibe los records de dicho patient
@@ -186,6 +161,48 @@ public class UI {
             }
         } while(true);
     }
+
+    private void reportMenu(Report report) throws IOException {
+        System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
+        System.out.println("Patient Observation: " + report.getPatientObservation());
+        System.out.println("Symptoms: " + report.getSymptoms());
+        int option = 0;
+        do{
+            System.out.println("0) Back to the Patient Menu");
+            System.out.println("1) Add an observation");
+            for(int i = 0 ; i < report.getSignals().size() ; i++){
+                System.out.println(i + 2 + ") Access " + report.getSignals().toString()); //...EDA sample frequency..(Hz)
+                option = Utilities.readInteger("Select an option: ");
+                if(option == 0){
+                    return;
+                }
+                if (option == 1){
+                    this.addObservationMenu(report);
+                }
+                if (option >= 2 && option <= report.getSignals().size() + 2){
+                    //Lo que nos apetezca hacer cuando se eliga una señal, printearla por ejemplo
+                }
+            }
+
+        } while(true);
+    }
+
+
+
+    private void addObservationMenu(Report report) throws IOException {
+        String doctorObervation = Utilities.readString("Introduce the observation: ");
+        report.setDoctorObservation(doctorObervation);
+        connection.getSendViaNetwork().sendStrings(doctorObervation);
+    }
+
+    private void exitMenu(){
+        System.out.println("Exiting Doctor Application");
+        connection.releaseResources(); //Alomejor deberíamos envíar algo de feedback al server
+        System.exit(0);
+    }
+
+
+    /*
     private void reportMenu(Report report) throws IOException {
         System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
         System.out.println("Patient Observation: " + report.getPatientObservation());
@@ -200,7 +217,7 @@ public class UI {
                 System.out.println(i + 2 + ") Access " + report.getSignals().toString()); //TODO: aqui nos imprimiría todo 2)EDA,EMG,EEG, ACC
             }
 
-             */
+
 
             option = Utilities.readInteger("Select an option: ");
             switch (option){
@@ -216,7 +233,9 @@ public class UI {
             }
         } while (true);
     }
+     */
     //Not clear
+    /*
     private void signalMenu(Report report) throws IOException {
         System.out.println("\nSIGNAL MENU:  ");
         System.out.println("Select the signal: ");
@@ -258,46 +277,34 @@ public class UI {
 
     }
 
-    /* //---------------ALTERNATIVA A reportMenu() + signalMenu() juntos ----------------
+     */
 
-
-    private void reportMenu(Report report) throws IOException {
-        System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
-        System.out.println("Patient Observation: " + report.getPatientObservation());
-        System.out.println("Symptoms: " + report.getSymptoms());
+    /*
+    private void patientListMenu(Doctor doctor) throws IOException{
+        System.out.println("\nPATIENT LIST MENU");
+        List<Patient> patients = doctor.getPatients();
         int option = 0;
         do{
-            System.out.println("0) Back to the Patient Menu");
-            System.out.println("1) Add an observation");
-            for(int i = 0 ; i < report.getSignals().size() ; i++){
-                System.out.println(i + 2 + ") Access " + report.getSignals().toString());
-                option = Utilities.readInteger("Select an option: ");
-                if(option == 0){
-                    return;
-                }
-                if (option == 1){
-                    this.addObservationMenu(report);
-                }
-                if (option >= 2 && option <= report.getSignals().size() + 2){
-                    //Lo que nos apetezca hacer cuando se eliga una señal, printearla por ejemplo
-                }
+            System.out.println("0) Back to Main Menu");
+            for(int i = 0; i < patients.size(); i++){
+                System.out.println((i+1) + ") " + patients.get(i).getFullName());
             }
-
+            option = Utilities.readInteger("Select a patient: ");
+            if(option == 0){
+                return;
+            }
+            if (option >= 1 && option <= patients.size()){
+                Patient patient = patients.get(option - 1);
+                this.patientMenu(patient);
+            }
+            System.out.println("Please select a valid option.\n");
         } while(true);
-    }*/
-
-
-
-    private void addObservationMenu(Report report) throws IOException {
-        String doctorObervation = Utilities.readString("Introduce the observation: ");
-        report.setDoctorObservation(doctorObervation);
-        connection.getSendViaNetwork().sendStrings(doctorObervation);
     }
 
-    private void exitMenu(){
-        System.out.println("Exiting Doctor Application");
-        connection.releaseResources(); //Alomejor deberíamos envíar algo de feedback al server
-        System.exit(0);
-    }
+     */
+
+    //---------------ALTERNATIVA A reportMenu() + signalMenu() juntos ----------------
+
+
 
 }
