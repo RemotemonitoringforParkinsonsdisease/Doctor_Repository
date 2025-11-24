@@ -125,9 +125,9 @@ public class UI {
     }
     private void loggedMenu() throws IOException {
         Doctor doctor = connection.getReceiveViaNetwork().receiveDoctor();
-        System.out.println("Welcome " + doctor.getFullName() + "!\n");
-        System.out.println("\nMAIN DOCTOR MENU");
         do{
+            System.out.println("Welcome " + doctor.getFullName() + "!\n");
+            System.out.println("\nMAIN DOCTOR MENU");
             System.out.println("0) Exit");
             for(int i = 1; i <= doctor.getPatients().size(); i++){
                 System.out.println(i+")"+doctor.getPatients().get(i).getFullName());
@@ -147,14 +147,14 @@ public class UI {
     private void patientMenu(Patient patient) throws IOException {
         connection.getSendViaNetwork().sendInt(patient.getPatientId());//Se manda el id del paciente al server
         patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient());//Se recibe los records de dicho patient
-        System.out.println("\nPATIENT MENU: " + patient.getFullName());
         int option = 0;
         do{
+            System.out.println("\nPATIENT MENU: " + patient.getFullName());
             System.out.println("0)Back to Patient List");
             for(int i = 0; i < patient.getReports().size(); i++){
                 System.out.println((i+1) + ") Report Date: " + patient.getReports().get(i).getReportDate());
             }
-            option = Utilities.readInteger("Select a report: ");
+            option = Utilities.readInteger("Select an option: ");
             if(option == 0){
                 connection.getSendViaNetwork().sendInt(0);
                 return;
