@@ -16,6 +16,12 @@ public class Signal {
         this.signalType = signalType;
     }
 
+    public Signal(Integer signalId, SignalType signalType, int samplingRate) {
+        this.signalId = signalId;
+        this.signalType = signalType;
+        this.samplingRate = samplingRate;
+    }
+
     public Signal(Integer signalId, SignalType signalType, List<Integer> values) {
         this.signalId = signalId;
         this.signalType = signalType;

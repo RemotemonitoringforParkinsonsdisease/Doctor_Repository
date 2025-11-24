@@ -78,6 +78,7 @@ public class UI {
                 String password = Utilities.readString("Enter your password: ");
                 Doctor preDoctor = new Doctor(fullName, password, dob);
                 connection.getSendViaNetwork().sendRegisteredDoctor(preDoctor);
+                return;
 
             } else if (message.equals("EMAIL ERROR")) {
                 System.out.println("This email is already associated with a doctor");
@@ -94,7 +95,6 @@ public class UI {
                 valid = Utilities.checkEmail(email);
 
             } while (!valid);
-
             connection.getSendViaNetwork().sendStrings(email);
             String emailVerification = connection.getReceiveViaNetwork().receiveString();
 
@@ -114,7 +114,7 @@ public class UI {
                     System.out.println("Login successful!\n");
                     this.loggedMenu();
                 } else {
-                    System.out.println("Login failed. Incorrect email or password.\n");
+                    System.out.println(passwordVerification);
                     loginMenu();
                 }
             }else {
@@ -134,17 +134,19 @@ public class UI {
             }
             int option = Utilities.readInteger("Select an option: ");
             if(option == 0){
+                connection.getSendViaNetwork().sendInt(0);
                this.exitMenu();
             }else if(option >= 1 && option <= doctor.getPatients().size()){
+                connection.getSendViaNetwork().sendInt(1);
                 this.patientMenu(doctor.getPatients().get(option - 1));
             }else System.out.println("Please select a valid option.\n");
         } while(true);
     }
 
 
-    private void patientMenu(Patient patient) throws IOException { //Este menu es redundante
+    private void patientMenu(Patient patient) throws IOException {
         connection.getSendViaNetwork().sendInt(patient.getPatientId());//Se manda el id del paciente al server
-        patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient(patient));//Se recibe los records de dicho patient
+        patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient());//Se recibe los records de dicho patient
         System.out.println("\nPATIENT MENU: " + patient.getFullName());
         int option = 0;
         do{
@@ -154,6 +156,7 @@ public class UI {
             }
             option = Utilities.readInteger("Select a report: ");
             if(option == 0){
+                connection.getSendViaNetwork().sendInt(0);
                 return;
             }
             if (option >= 1 && option <= patient.getReports().size()){
@@ -177,6 +180,7 @@ public class UI {
                     return;
                 }
                 if (option == 1){
+                    connection.getSendViaNetwork().sendInt(option);
                     this.addObservationMenu(report);
                 }
                 if (option >= 2 && option <= report.getSignals().size() + 2){
@@ -192,7 +196,10 @@ public class UI {
     private void addObservationMenu(Report report) throws IOException {
         String doctorObervation = Utilities.readString("Introduce the observation: ");
         report.setDoctorObservation(doctorObervation);
+        connection.getSendViaNetwork().sendInt(report.getReportId());
         connection.getSendViaNetwork().sendStrings(doctorObervation);
+        String message = connection.getReceiveViaNetwork().receiveString();
+        System.out.println(message);
     }
 
     private void exitMenu(){

@@ -67,7 +67,7 @@ public class ReceiveDataViaNetwork {
 
     //TODO: Ver como implementamos la recepción para todos los casos de Report
 
-    public List<Report> receiveReportsOfAPatient(Patient patient) throws IOException{
+    public List<Report> receiveReportsOfAPatient() throws IOException{
         int numReports = dataInputStream.readInt();
         List<Report> reports = new ArrayList<Report>();
         for (int i = 0; i < numReports; i++) {
@@ -85,8 +85,8 @@ public class ReceiveDataViaNetwork {
             String date = dataInputStream.readUTF();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate dateReport = LocalDate.parse(date, formatter);
-            List<Signal> signals = receiveSignals();
             List<Symptoms> symptoms = receiveSymptoms();
+            List<Signal> signals = receiveSignals();
             String patientObservation = dataInputStream.readUTF();
             String doctorObservation = dataInputStream.readUTF();
 
@@ -110,11 +110,12 @@ public class ReceiveDataViaNetwork {
             int numSignals = dataInputStream.readInt();
 
             for (int i = 0; i < numSignals; i++) {
+                Integer signalId = dataInputStream.readInt();
                 String typeSignal = dataInputStream.readUTF();
                 SignalType type = SignalType.valueOf(typeSignal);
-                Integer signalId = dataInputStream.readInt();
+                int sampleFrequency = dataInputStream.readInt();
                 String valuesString = dataInputStream.readUTF();
-                Signal signal = new Signal(signalId, type);
+                Signal signal = new Signal(signalId, type, sampleFrequency);
                 //Esto recibe la lista completa de valores de la señal
                 signal.stringToIntValues(valuesString);
                 signals.add(signal);
