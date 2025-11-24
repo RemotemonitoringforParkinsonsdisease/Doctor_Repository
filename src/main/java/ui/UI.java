@@ -39,7 +39,7 @@ public class UI {
         do {
             int option = 0;
             System.out.println("WELCOME TO THE DOCTOR APPLICATION\n\n");
-            System.out.println("1) Login\n2) Register\n3) Exit");
+            System.out.println("1) Register\n2) Log in\n3) Exit");
             option = Utilities.readInteger("Select an option: ");
             switch (option){
                 case 1:
