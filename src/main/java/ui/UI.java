@@ -27,7 +27,13 @@ public class UI {
         String ipAddress = Utilities.readString("IP Address: ");
         int port = Utilities.readInteger("Port: ");
         this.connection = new Connection(ipAddress, port);
-        connection.getSendViaNetwork().sendInt(2);
+        if (connection.getSendViaNetwork() != null) {
+            connection.getSendViaNetwork().sendInt(2);
+        } else {
+            System.out.println("Error: SendDataViaNetwork not initialized.");
+            // Maneja el error adecuadamente (por ejemplo, reintentar la conexión)
+        }
+
         String message = connection.getReceiveViaNetwork().receiveString();
         System.out.println(message);
         if(message.equals("DOCTOR")){
@@ -70,7 +76,8 @@ public class UI {
                 email = Utilities.readString("Enter your email: ");
                 valid = Utilities.checkEmail(email);
             }while(!valid);
-            connection.getSendViaNetwork().sendStrings(email); //le mando el email al servidor para que lo compruebe
+            connection.getSendViaNetwork().sendStrings(email);//le mando el email al servidor para que lo compruebe
+            System.out.println("email sent: "+ email);
             String message = connection.getReceiveViaNetwork().receiveString(); //Recibo un mensaje del servidor
             if (message.equals("EMAIL OK")) {
                 String fullName = Utilities.readString("Enter your full name: ");
@@ -126,9 +133,12 @@ public class UI {
     private void loggedMenu() throws IOException {
         Doctor doctor = connection.getReceiveViaNetwork().receiveDoctor();
         do{
-            System.out.println("Welcome " + doctor.getFullName() + "!\n");
+            System.out.println("Welcome Dr" + doctor.getFullName() + "!\n");
             System.out.println("\nMAIN DOCTOR MENU");
             System.out.println("0) Exit");
+            if(doctor.getPatients().isEmpty()){
+                System.out.println("You have no patients in this doctor.");
+            }
             for(int i = 1; i <= doctor.getPatients().size(); i++){
                 System.out.println(i+")"+doctor.getPatients().get(i).getFullName());
             }
