@@ -22,22 +22,29 @@ public class UI {
         ui.startConnection();
     }
 
-    private void startConnection() throws IOException{ //TODO: Iterar hasta conexión correcta
-        System.out.println("Select IP Address and Port to connect to :");
-        String ipAddress = Utilities.readString("IP Address: ");
-        int port = Utilities.readInteger("Port: ");
-        this.connection = new Connection(ipAddress, port);
-        if (connection.getSendViaNetwork() != null) {
-            connection.getSendViaNetwork().sendInt(2);
-        } else {
-            System.out.println("Error: SendDataViaNetwork not initialized.");
-            // Maneja el error adecuadamente (por ejemplo, reintentar la conexión)
+    private void startConnection() {
+        boolean connected = false;
+
+        while (!connected) {
+            System.out.println("Select IP Address and Port to connect to :");
+            String ipAddress = Utilities.readString("IP Address: ");
+            int port = Utilities.readInteger("Port: ");
+
+            this.connection = new Connection(ipAddress, port);
+            connected = true; // si no lanza excepción, se conectó correctamente
         }
 
-        String message = connection.getReceiveViaNetwork().receiveString();
-        System.out.println(message);
-        if(message.equals("DOCTOR")){
-            this.preLoggedMenu();
+        try {
+            connection.getSendViaNetwork().sendInt(2);
+            String message = connection.getReceiveViaNetwork().receiveString();
+            System.out.println(message);
+
+            if ("DOCTOR".equals(message)) {
+                this.preLoggedMenu();
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error in communication once it was connected.");
         }
     }
 
