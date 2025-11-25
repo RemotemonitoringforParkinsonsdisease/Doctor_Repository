@@ -51,7 +51,7 @@ public class UI {
     private void preLoggedMenu() throws IOException {
         do {
             int option = 0;
-            System.out.println("WELCOME TO THE DOCTOR APPLICATION\n\n");
+            System.out.println("-----WELCOME TO THE DOCTOR APPLICATION-----\n\n");
             System.out.println("1) Register\n2) Log in\n3) Exit");
             option = Utilities.readInteger("Select an option: ");
             switch (option){
