@@ -142,6 +142,7 @@ public class UI {
         do{
             System.out.println("Welcome Dr" + doctor.getFullName() + "!\n");
             System.out.println("\nMAIN DOCTOR MENU");
+            System.out.println(doctor.getPatients());
             System.out.println("0) Exit");
             if(doctor.getPatients().isEmpty()){
                 System.out.println("You have no patients in this doctor.");
