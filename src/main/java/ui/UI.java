@@ -30,7 +30,7 @@ public class UI {
             int port = Utilities.readInteger("Port: ");
 
             this.connection = new Connection(ipAddress, port);
-            connected = true; // si no lanza excepción, se conectó correctamente
+            connected = true;
         }
 
         try {
@@ -138,12 +138,12 @@ public class UI {
     private void loggedMenu() throws IOException {
         Doctor doctor = connection.getReceiveViaNetwork().receiveDoctor();
         do{
-            System.out.println("Welcome Dr" + doctor.getFullName() + "!\n");
+            System.out.println("Welcome Dr " + doctor.getFullName() + "!\n");
             System.out.println("\nMAIN DOCTOR MENU");
             System.out.println(doctor.getPatients());
-            System.out.println("0) Exit");
+            System.out.println("0) Back to main menu");
             if(doctor.getPatients().isEmpty()){
-                System.out.println("You have no patients in this doctor.");
+                System.out.println("Dr "+ doctor.getFullName()+ " you have no patients yet.\n");
             }
             for(int i = 1; i <= doctor.getPatients().size(); i++){
                 System.out.println(i+")"+doctor.getPatients().get(i).getFullName());
@@ -151,7 +151,7 @@ public class UI {
             int option = Utilities.readInteger("Select an option: ");
             if(option == 0){
                 connection.getSendViaNetwork().sendInt(0);
-               this.exitMenu();
+               this.preLoggedMenu();
             }else if(option >= 1 && option <= doctor.getPatients().size()){
                 connection.getSendViaNetwork().sendInt(1);
                 this.patientMenu(doctor.getPatients().get(option - 1));
