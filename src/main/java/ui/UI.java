@@ -83,7 +83,8 @@ public class UI {
             }while(!valid);
             connection.getSendViaNetwork().sendStrings(email);//le mando el email al servidor para que lo compruebe
             System.out.println("email sent: "+ email);
-            String message = connection.getReceiveViaNetwork().receiveString(); //Recibo un mensaje del servidor
+            String message = connection.getReceiveViaNetwork().receiveString();//Recibo un mensaje del servidor
+            System.out.println(message);
             if (message.equals("EMAIL OK")) {
                 String fullName = Utilities.readString("Enter your full name: ");
                 LocalDate dob = Utilities.readDate("Enter your DOB: ");
@@ -91,7 +92,6 @@ public class UI {
                 Doctor preDoctor = new Doctor(fullName, password, dob);
                 connection.getSendViaNetwork().sendRegisteredDoctor(preDoctor);
                 return;
-
             } else if (message.equals("EMAIL ERROR")) {
                 System.out.println("This email is already associated with a doctor");
             }
