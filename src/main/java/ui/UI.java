@@ -2,7 +2,6 @@ package ui;
 
 import POJOs.*;
 import manageData.ReceiveDataViaNetwork;
-
 import javax.print.Doc;
 import java.io.Console;
 import java.io.IOException;
@@ -37,7 +36,6 @@ public class UI {
         try {
             connection.getSendViaNetwork().sendInt(2);
             String message = connection.getReceiveViaNetwork().receiveString();
-            System.out.println(message);
 
             if ("DOCTOR".equals(message)) {
                 this.preLoggedMenu();
@@ -51,7 +49,7 @@ public class UI {
     private void preLoggedMenu() throws IOException {
         do {
             int option = 0;
-            System.out.println("-----WELCOME TO THE DOCTOR APPLICATION-----\n\n");
+            System.out.println("-----WELCOME TO THE DOCTOR APPLICATION-----");
             System.out.println("1) Register\n2) Log in\n3) Exit");
             option = Utilities.readInteger("Select an option: ");
             switch (option){
