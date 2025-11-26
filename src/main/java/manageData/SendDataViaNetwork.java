@@ -15,12 +15,8 @@ public class SendDataViaNetwork {
 
 
 
-    public SendDataViaNetwork(Socket socket) {
-        try {
-            this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public SendDataViaNetwork(DataOutputStream dos) {
+        this.dataOutputStream = dos;
     }
 
 

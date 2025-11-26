@@ -18,13 +18,8 @@ public class ReceiveDataViaNetwork {
     private DataInputStream dataInputStream;
 
 
-    public ReceiveDataViaNetwork(Socket socket) {
-        try {
-            this.dataInputStream = new DataInputStream(socket.getInputStream());
-        } catch (IOException e) {
-            System.err.println("Error al inicializar el flujo de entrada: " + e.getMessage());
-            e.printStackTrace();
-        }
+    public ReceiveDataViaNetwork(DataInputStream dis) {
+        this.dataInputStream = dis;
     }
 
     public String receiveString() throws IOException{

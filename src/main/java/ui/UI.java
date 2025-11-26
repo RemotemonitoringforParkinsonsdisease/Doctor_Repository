@@ -21,7 +21,7 @@ public class UI {
         ui.startConnection();
     }
 
-    private void startConnection() {
+    private void startConnection() throws IOException {
         boolean connected = false;
 
         while (!connected) {
