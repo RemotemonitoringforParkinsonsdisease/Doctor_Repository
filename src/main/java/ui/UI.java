@@ -140,13 +140,12 @@ public class UI {
         do{
             System.out.println("Welcome Dr " + doctor.getFullName() + "!\n");
             System.out.println("\nMAIN DOCTOR MENU");
-            System.out.println(doctor.getPatients());
             System.out.println("0) Back to main menu");
             if(doctor.getPatients().isEmpty()){
                 System.out.println("Dr "+ doctor.getFullName()+ " you have no patients yet.\n");
             }
             for(int i = 1; i <= doctor.getPatients().size(); i++){
-                System.out.println(i+")"+doctor.getPatients().get(i).getFullName());
+                System.out.println(i+")"+doctor.getPatients().get(i-1).getFullName());
             }
             int option = Utilities.readInteger("Select an option: ");
             if(option == 0){
