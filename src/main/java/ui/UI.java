@@ -32,15 +32,12 @@ public class UI {
             this.connection = new Connection(ipAddress, port);
             connected = true;
         }
-
         try {
             connection.getSendViaNetwork().sendInt(2);
             String message = connection.getReceiveViaNetwork().receiveString();
-
             if ("DOCTOR".equals(message)) {
                 this.preLoggedMenu();
             }
-
         } catch (IOException e) {
             System.out.println("Error in communication once it was connected.");
         }
@@ -72,6 +69,7 @@ public class UI {
         } while(true);
 
     }
+
     private void registerMenu() throws IOException {
         do {
             System.out.println("\nREGISTER DOCTOR MENU");
@@ -97,6 +95,7 @@ public class UI {
             }
         }while(true);
     }
+
     private void loginMenu() throws IOException {
         do {
             System.out.println("\nLOGIN MENU DOCTOR");
@@ -135,6 +134,7 @@ public class UI {
             }
         }while (true);
     }
+
     private void loggedMenu() throws IOException {
         Doctor doctor = connection.getReceiveViaNetwork().receiveDoctor();
         do{
@@ -157,7 +157,6 @@ public class UI {
             }else System.out.println("Please select a valid option.\n");
         } while(true);
     }
-
 
     private void patientMenu(Patient patient) throws IOException {
         connection.getSendViaNetwork().sendInt(patient.getPatientId());//Se manda el id del paciente al server
@@ -205,8 +204,6 @@ public class UI {
 
         } while(true);
     }
-
-
 
     private void addObservationMenu(Report report) throws IOException {
         String doctorObervation = Utilities.readString("Introduce the observation: ");

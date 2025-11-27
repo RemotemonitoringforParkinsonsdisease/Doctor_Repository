@@ -3,50 +3,28 @@ import POJOs.Doctor;
 import POJOs.Patient;
 
 import java.io.*;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public class SendDataViaNetwork {
 
-
     private DataOutputStream dataOutputStream;
-
-
 
     public SendDataViaNetwork(DataOutputStream dos) {
         this.dataOutputStream = dos;
     }
-
-
     public void sendStrings(String message) throws IOException {
         dataOutputStream.writeUTF(message);
     }
-
-
     public void sendInt(Integer message) throws IOException{
         dataOutputStream.writeInt(message);
     }
-
 
     public void sendRegisteredDoctor(Doctor doctor) throws IOException{
         dataOutputStream.writeUTF(doctor.getFullName());
         dataOutputStream.writeUTF(doctor.getDoctorPassword());
         dataOutputStream.writeUTF(doctor.getDob().toString());
-    }
-
-    public void sendPatient(Patient patient) throws IOException{
-
-    }
-
-
-    public void releaseResources() {
-        try {
-            dataOutputStream.close();
-        } catch (IOException ex) {
-            Logger.getLogger(SendDataViaNetwork.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }
 
