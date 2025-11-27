@@ -126,7 +126,7 @@ public class UI {
                     this.loggedMenu();
                 } else {
                     System.out.println(passwordVerification);
-                    loginMenu();
+                    return;
                 }
             }else {
                 System.out.println(emailVerification);
