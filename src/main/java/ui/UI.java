@@ -33,18 +33,27 @@ public class UI {
             """);
             String ipAddress = Utilities.readString("-> IP Address: ");
             int port = Utilities.readInteger("-> Port: ");
+            System.out.println("----------------------------------------------");
 
             try {
                 this.connection = new Connection(ipAddress, port);
                 connected = true;
-                System.out.println("""
+                System.out.print("""
                 ╔══════════════════════════════════════════════╗
                 ║             CONNECTION SUCCESS!              ║
                 ╚══════════════════════════════════════════════╝
                 """);
+                System.out.println("----------------------------------------------");
+
             } catch (Exception e) {
-                System.out.println("Could not connect to " + ipAddress + ":" + port);
-                System.out.println("Please try again.\n");
+                System.out.println("""
+                ╔══════════════════════════════════════════════╗
+                ║             CONNECTION FAILED!               ║
+                ╚══════════════════════════════════════════════╝
+                """);
+                System.out.println("-> Could not connect to " + ipAddress + ":" + port);
+                System.out.println("-> Please try it again!\n");
+                System.out.println("----------------------------------------------");
             }
         }
         try {
@@ -54,7 +63,8 @@ public class UI {
                 this.preLoggedMenu();
             }
         } catch (IOException e) {
-            System.out.println("Error in communication once it was connected.");
+            System.out.println("-> Error in communication once it was connected! ");
+            System.out.println("----------------------------------------------");
         }
     }
 
@@ -86,34 +96,47 @@ public class UI {
                     break;
                 default:
                     System.out.println("Please select a valid option.\n");
+                    System.out.println("----------------------------------------------");
+
                     break;
             }
+            System.out.println("----------------------------------------------");
         } while(true);
 
     }
 
     private void registerMenu() throws IOException {
         do {
-            System.out.println("\nREGISTER DOCTOR MENU");
+            System.out.println("""
+            ╔════════════════════════════════════════╗
+            ║          REGISTER DOCTOR MENU          ║
+            ╚════════════════════════════════════════╝
+            """);
             boolean valid;
             String email;
             do {
-                email = Utilities.readString("Enter your email: ");
+                email = Utilities.readString("-> Enter your email: ");
                 valid = Utilities.checkEmail(email);
+
             }while(!valid);
             connection.getSendViaNetwork().sendStrings(email);//le mando el email al servidor para que lo compruebe
-            System.out.println("email sent: "+ email);
+            //System.out.println("email sent: "+ email);
             String message = connection.getReceiveViaNetwork().receiveString();//Recibo un mensaje del servidor
-            System.out.println(message);
+            //System.out.println(message);
             if (message.equals("EMAIL OK")) {
-                String fullName = Utilities.readString("Enter your full name: ");
-                LocalDate dob = Utilities.readDate("Enter your DOB: ");
-                String password = Utilities.readString("Enter your password: ");
+                System.out.println("""
+                ╔══════════════════════════════════════════════╗
+                ║                EMAIL ACCEPTED                ║
+                ╚══════════════════════════════════════════════╝
+                """);
+                String fullName = Utilities.readString("-> Enter your full name: ");
+                LocalDate dob = Utilities.readDate("-> Enter your DOB: ");
+                String password = Utilities.readString("-> Enter your password: ");
                 Doctor preDoctor = new Doctor(fullName, password, dob);
                 connection.getSendViaNetwork().sendRegisteredDoctor(preDoctor);
                 return;
             } else if (message.equals("EMAIL ERROR")) {
-                System.out.println("This email is already associated with a doctor");
+                System.out.println("-> This email is already associated with a doctor! ");
                 return;
             }
         }while(true);
@@ -121,11 +144,15 @@ public class UI {
 
     private void loginMenu() throws IOException {
         do {
-            System.out.println("\nLOGIN MENU DOCTOR");
+            System.out.println("""
+            ╔════════════════════════════════════════╗
+            ║             LOGIN DOCTOR MENU          ║
+            ╚════════════════════════════════════════╝
+            """);
             String email;
             boolean valid;
             do {
-                email = Utilities.readString("Enter your email: ");
+                email = Utilities.readString("-> Enter your email: ");
                 valid = Utilities.checkEmail(email);
 
             } while (!valid);
@@ -133,11 +160,19 @@ public class UI {
             String emailVerification = connection.getReceiveViaNetwork().receiveString();
 
             if (emailVerification.equals("EMAIL OK")) {
+                System.out.println("""
+                ╔══════════════════════════════════════════════╗
+                ║                EMAIL ACCEPTED                ║
+                ╚══════════════════════════════════════════════╝
+                """);
+
                 String password;
                 do {
-                    password = Utilities.readString("Enter your password: ");
+                    password = Utilities.readString("-> Enter your password: ");
                     if (password == null || password.isEmpty()) {
-                        System.out.println("Password cannot be empty.\n");
+                        System.out.println("----------------------------------------------");
+                        System.out.println("-> Password cannot be empty!");
+                        System.out.println("----------------------------------------------");
                     }
                 } while (password == null || password.isEmpty());
 
@@ -145,14 +180,26 @@ public class UI {
                 String passwordVerification = connection.getReceiveViaNetwork().receiveString();
 
                 if (passwordVerification.equals("PASSWORD OK")) {
-                    System.out.println("Login successful!\n");
+                    System.out.println("""
+                    ╔══════════════════════════════════════════════╗
+                    ║               LOGIN SUCCESSFUL               ║
+                    ╚══════════════════════════════════════════════╝
+                    """);
                     this.loggedMenu();
                 } else {
-                    System.out.println(passwordVerification);
+                    System.out.println("""
+                    ╔══════════════════════════════════════════════╗
+                    ║               PASSWORD INCORRECT             ║
+                    ╚══════════════════════════════════════════════╝
+                    """);
                     return;
                 }
             }else {
-                System.out.println(emailVerification);
+                System.out.println("""
+                ╔══════════════════════════════════════════════╗
+                ║                EMAIL NOT FOUND               ║
+                ╚══════════════════════════════════════════════╝
+                """);
                 return;
             }
         }while (true);
