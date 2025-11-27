@@ -140,7 +140,7 @@ public class UI {
         do{
             System.out.println("Welcome Dr " + doctor.getFullName() + "!\n");
             System.out.println("\nMAIN DOCTOR MENU");
-            System.out.println("0) Back to main menu");
+            System.out.println("0) Log out");
             if(doctor.getPatients().isEmpty()){
                 System.out.println("Dr "+ doctor.getFullName()+ " you have no patients yet.\n");
             }
@@ -183,25 +183,22 @@ public class UI {
         System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
         System.out.println("Patient Observation: " + report.getPatientObservation());
         System.out.println("Symptoms: " + report.getSymptoms());
-        int option = 0;
+        //receiveCSVFile() //TODO
+        System.out.println(printCSV()); //TODO
+        int option;
         do{
             System.out.println("0) Back to the Patient Menu");
             System.out.println("1) Add an observation");
-            for(int i = 0 ; i < report.getSignals().size() ; i++){
-                System.out.println(i + 2 + ") Access " + report.getSignals().toString()); //...EDA sample frequency..(Hz)
                 option = Utilities.readInteger("Select an option: ");
-                if(option == 0){
-                    return;
+                switch(option){
+                    case 0: return;
+                    case 1:
+                        this.addObservationMenu(report);
+                        break;
+                    default:
+                        System.out.println("Please select a valid option.\n");
+                        break;
                 }
-                if (option == 1){
-                    connection.getSendViaNetwork().sendInt(option);
-                    this.addObservationMenu(report);
-                }
-                if (option >= 2 && option <= report.getSignals().size() + 2){
-                    //Lo que nos apetezca hacer cuando se eliga una señal, printearla por ejemplo
-                }
-            }
-
         } while(true);
     }
 

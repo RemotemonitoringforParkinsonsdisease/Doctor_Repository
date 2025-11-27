@@ -67,30 +67,12 @@ public class ReceiveDataViaNetwork {
         String date = dataInputStream.readUTF();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate reportDate = LocalDate.parse(date, formatter);
-        List<Signal> signals = receiveSignals();
+        String signalsFilePath = dataInputStream.readUTF();
         List<Symptoms> symptoms = receiveSymptoms();
         String patientObservation = dataInputStream.readUTF();
         String doctorObservation = dataInputStream.readUTF();
-        report = new Report(reportId, patientId, reportDate, signals, symptoms, patientObservation, doctorObservation);
+        report = new Report(reportId, patientId, reportDate, signalsFilePath, symptoms, patientObservation, doctorObservation);
         return report;
-    }
-
-    public List<Signal> receiveSignals() throws IOException{
-        List<Signal> signals = new ArrayList<>();
-        int numSignals = dataInputStream.readInt();
-
-        for (int i = 0; i < numSignals; i++) {
-            Integer signalId = dataInputStream.readInt();
-            String typeSignal = dataInputStream.readUTF();
-            SignalType type = SignalType.valueOf(typeSignal);
-            int sampleFrequency = dataInputStream.readInt();
-            String valuesString = dataInputStream.readUTF();
-            Signal signal = new Signal(signalId, type, sampleFrequency);
-            //Esto recibe la lista completa de valores de la señal
-            signal.stringToIntValues(valuesString);
-            signals.add(signal);
-        }
-        return signals;
     }
 
     public List<Symptoms> receiveSymptoms() throws IOException{

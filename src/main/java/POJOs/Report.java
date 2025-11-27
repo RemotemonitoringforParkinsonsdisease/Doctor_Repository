@@ -8,35 +8,19 @@ public class Report {
     private Integer reportId;
     private Integer patientId;
     private LocalDate reportDate;
-    private List<Signal> signals;
+    private String signalsFilePath;
     private List<Symptoms> symptoms;
     private String patientObservation;
     private String doctorObservation;
 
-    public Report(Integer reportId, Integer patientId, LocalDate reportDate, List<Signal> signals, List<Symptoms> symptoms, String patientObservation, String doctorObservation) {
+    public Report(Integer reportId, Integer patientId, LocalDate reportDate, String signalsFilePath, List<Symptoms> symptoms, String patientObservation, String doctorObservation) {
         this.reportId = reportId;
         this.patientId = patientId;
         this.reportDate = reportDate;
-        this.signals = signals;
+        this.signalsFilePath = signalsFilePath;
         this.symptoms = symptoms;
         this.patientObservation = patientObservation;
         this.doctorObservation = doctorObservation;
-    }
-
-    public Report(Integer patientId, LocalDate reportDate, String patientObservation, String doctorObservation, List<Symptoms> symptoms, List<Signal> signals) {
-        this.patientId = patientId;
-        this.reportDate = reportDate;
-        this.patientObservation = patientObservation;
-        this.doctorObservation = doctorObservation;
-        this.symptoms = symptoms;
-        this.signals = signals;
-    }
-
-    public Report(Integer reportId, Integer patientId, LocalDate reportDate, String patientObservation, String doctorObservation) {
-        this.reportId = reportId;
-        this.patientId = patientId;
-        this.reportDate = reportDate;
-        this.patientObservation = patientObservation;
     }
 
     public Integer getReportId() {
@@ -64,14 +48,6 @@ public class Report {
         this.reportDate = reportDate;
     }
 
-    public List<Signal> getSignals() {
-        return signals;
-    }
-
-    public void setSignals(List<Signal> signals) {
-        this.signals = signals;
-    }
-
     public List<Symptoms> getSymptoms() {
         return symptoms;
     }
@@ -96,12 +72,11 @@ public class Report {
         this.doctorObservation = doctorObservation;
     }
 
-    public Signal getSignalByType(SignalType signalType){
-        for(Signal signal : signals){
-            if(signal.getSignalType() ==  signalType){
-                return signal;
-            }
-        }
-        return null;
+    public String getSignalsFilePath() {
+        return signalsFilePath;
+    }
+
+    public void setSignalsFilePath(String signalsFilePath) {
+        this.signalsFilePath = signalsFilePath;
     }
 }
