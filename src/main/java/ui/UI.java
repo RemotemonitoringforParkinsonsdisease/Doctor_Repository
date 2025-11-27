@@ -174,6 +174,7 @@ public class UI {
                 return;
             }
             if (option >= 1 && option <= patient.getReports().size()){
+                connection.getSendViaNetwork().sendInt(1);
                 this.reportMenu(patient.getReports().get(option - 1));
             }
         } while(true);
@@ -193,7 +194,7 @@ public class UI {
                     case 0: return;
                     case 1:
                         this.addObservationMenu(report);
-                        break;
+                        return;
                     default:
                         System.out.println("Please select a valid option.\n");
                         break;
