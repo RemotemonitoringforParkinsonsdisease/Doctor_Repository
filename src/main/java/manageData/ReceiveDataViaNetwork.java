@@ -4,7 +4,11 @@ package manageData;
 import POJOs.*;
 
 import java.io.DataInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -67,7 +71,7 @@ public class ReceiveDataViaNetwork {
         String date = dataInputStream.readUTF();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate reportDate = LocalDate.parse(date, formatter);
-        String signalsFilePath = dataInputStream.readUTF();
+        String signalsFilePath = receiveCSVFile();
         List<Symptoms> symptoms = receiveSymptoms();
         String patientObservation = dataInputStream.readUTF();
         String doctorObservation = dataInputStream.readUTF();
@@ -97,4 +101,29 @@ public class ReceiveDataViaNetwork {
         doctor.setPatients(patients);
         return doctor;
     }
+
+    public String receiveCSVFile() throws IOException {
+
+        String fileName = dataInputStream.readUTF();
+        long fileSize = dataInputStream.readLong();
+
+        String folder = "signals_recived/";
+        Files.createDirectories(Paths.get(folder));
+
+        Path filePath = Paths.get(folder + fileName);
+        FileOutputStream fos = new FileOutputStream(filePath.toFile());
+
+        byte[] buffer = new byte[4096];
+        long remaining = fileSize;
+        int bytesRead;
+
+        while (remaining > 0 && (bytesRead = dataInputStream.read(buffer, 0, (int)Math.min(buffer.length, remaining))) != -1) {
+            fos.write(buffer, 0, bytesRead);
+            remaining -= bytesRead;
+        }
+
+        fos.close();
+        return filePath.toString(); // ruta en el servidor
+    }
+
 }

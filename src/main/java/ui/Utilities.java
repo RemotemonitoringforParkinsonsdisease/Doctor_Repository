@@ -3,6 +3,9 @@ package ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.regex.Matcher;
@@ -77,15 +80,21 @@ public class Utilities {
         }
     }
 
-    public static String formatMacAdress(String input) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < input.length(); i++) {
-            result.append(input.charAt(i));
-            if ((i + 1) % 2 == 0 && i < input.length() - 1) {
-                result.append(":");
-            }
+    public static void printCSVFile(String filePath) {
+        System.out.println("\n----- CSV FILE CONTENT -----\n");
+
+        try {
+            Path path = Paths.get(filePath);
+
+            // Leer todas las líneas del archivo y escribirlas en consola
+            Files.lines(path).forEach(System.out::println);
+
+            System.out.println("\n----- END OF FILE -----\n");
+
+        } catch (IOException e) {
+            System.out.println("Error reading CSV file: " + e.getMessage());
+            e.printStackTrace();
         }
-        return result.toString();
     }
 
 }

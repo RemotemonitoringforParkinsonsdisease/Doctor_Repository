@@ -183,8 +183,7 @@ public class UI {
         System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
         System.out.println("Patient Observation: " + report.getPatientObservation());
         System.out.println("Symptoms: " + report.getSymptoms());
-        //receiveCSVFile() //TODO
-        System.out.println(printCSV()); //TODO
+        Utilities.printCSVFile(report.getSignalsFilePath());
         int option;
         do{
             System.out.println("0) Back to the Patient Menu");
