@@ -208,24 +208,63 @@ public class UI {
     private void loggedMenu() throws IOException {
         Doctor doctor = connection.getReceiveViaNetwork().receiveDoctor();
         do{
-            System.out.println("Welcome Dr " + doctor.getFullName() + "!\n");
-            System.out.println("\nMAIN DOCTOR MENU");
-            System.out.println("0) Log out");
-            if(doctor.getPatients().isEmpty()){
-                System.out.println("Dr "+ doctor.getFullName()+ " you have no patients yet.\n");
-            }
-            for(int i = 1; i <= doctor.getPatients().size(); i++){
-                System.out.println(i+")"+doctor.getPatients().get(i-1).getFullName());
-            }
-            int option = Utilities.readInteger("Select an option: ");
-            if(option == 0){
+            System.out.println("""
+            ╔════════════════════════════════════════╗
+            ║              MAIN DOCTOR MENU          ║
+            ╚════════════════════════════════════════╝
+            """);
+            System.out.println("-> Welcome Dr " + doctor.getFullName() + "! \n");
+            System.out.println("----------------------------------------------");
+            System.out.println("""
+            ╔════════════════════════════════════════╗
+            ║              0) Log out                ║
+            ║              1) See Patients           ║
+            ╚════════════════════════════════════════╝
+            """);
+            int option = Utilities.readInteger("-> Select an option: ");
+
+            if (option == 0) {
                 connection.getSendViaNetwork().sendInt(0);
-               this.preLoggedMenu();
-            }else if(option >= 1 && option <= doctor.getPatients().size()){
+                this.preLoggedMenu();
+
+            } else if (option == 1) {
                 connection.getSendViaNetwork().sendInt(1);
-                this.patientMenu(doctor.getPatients().get(option - 1));
-            }else System.out.println("Please select a valid option.\n");
+                showPatientList(doctor);
+
+            } else {
+                System.out.println("\n-> Please select a valid option! \n");
+            }
         } while(true);
+    }
+
+    public void showPatientList(Doctor doctor) throws IOException {
+        System.out.println("""
+        ╔════════════════════════════════════════╗
+        ║              YOUR PATIENTS             ║
+        ╚════════════════════════════════════════╝
+        """);
+
+        if (doctor.getPatients().isEmpty()) {
+            System.out.println("-> You currently have no assigned patients! \n");
+            return;
+        }
+
+        for (int i = 1; i <= doctor.getPatients().size(); i++) {
+            System.out.println("  " + i + ") " + doctor.getPatients().get(i - 1).getFullName());
+        }
+
+        System.out.println("\n----------------------------------------------");
+        int option = Utilities.readInteger("-> Select a patient (0 to go back): ");
+        if (option == 0) {
+            return;
+        }
+
+        if (option >= 1 && option <= doctor.getPatients().size()) {
+            connection.getSendViaNetwork().sendInt(1);
+            this.patientMenu(doctor.getPatients().get(option - 1));
+        } else {
+            System.out.println("-> Invalid option! \n");
+        }
     }
 
     private void patientMenu(Patient patient) throws IOException {
@@ -233,42 +272,91 @@ public class UI {
         patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient());//Se recibe los records de dicho patient
         int option = 0;
         do{
-            System.out.println("\nPATIENT MENU: " + patient.getFullName());
-            System.out.println("0)Back to Patient List");
-            for(int i = 0; i < patient.getReports().size(); i++){
-                System.out.println((i+1) + ") Report Date: " + patient.getReports().get(i).getReportDate());
+            System.out.println("""
+            ╔════════════════════════════════════════╗
+            ║               PATIENT MENU             ║
+            ╚════════════════════════════════════════╝
+            """);
+            System.out.println("-> Patient: " + patient.getFullName() + "\n");
+            System.out.println("----------------------------------------------");
+
+            System.out.println("""
+            ╔════════════════════════════════════════╗
+            ║             0) Back to Patients        ║
+            ╟────────────────────────────────────────╢
+            ║             Reports Available          ║
+            ╚════════════════════════════════════════╝
+            """);
+
+            if (patient.getReports().isEmpty()) {
+                System.out.println("-> This patient has no reports yet! \n");
+            } else {
+                for (int i = 0; i < patient.getReports().size(); i++) {
+                    System.out.println("  " + (i + 1) + ") Report Date: " + patient.getReports().get(i).getReportDate());
+                }
+                System.out.println();
             }
-            option = Utilities.readInteger("Select an option: ");
-            if(option == 0){
+
+            option = Utilities.readInteger("-> Select an option: ");
+
+            // Volver atrás
+            if (option == 0) {
                 connection.getSendViaNetwork().sendInt(0);
                 return;
             }
-            if (option >= 1 && option <= patient.getReports().size()){
+
+            // Acceder a report
+            if (option >= 1 && option <= patient.getReports().size()) {
                 connection.getSendViaNetwork().sendInt(1);
                 this.reportMenu(patient.getReports().get(option - 1));
+            } else {
+                System.out.println("\n-> Invalid option. Please try again! \n");
             }
         } while(true);
     }
 
     private void reportMenu(Report report) throws IOException {
-        System.out.println("\nREPORT MENU: Report Date " + report.getReportDate());
-        System.out.println("Patient Observation: " + report.getPatientObservation());
-        System.out.println("Symptoms: " + report.getSymptoms());
+        System.out.println("""
+        ╔════════════════════════════════════════╗
+        ║                REPORT MENU             ║
+        ╚════════════════════════════════════════╝
+        """);
+
+        System.out.println("-> Report Date: " + report.getReportDate());
+        System.out.println("----------------------------------------------");
+
+        System.out.println("-> Patient Observation:");
+        System.out.println("   " + report.getPatientObservation() + "\n");
+
+        System.out.println("-> Symptoms:");
+        System.out.println("   " + report.getSymptoms() + "\n");
+
+        System.out.println("-> Recorded Signals (CSV file):");
         Utilities.printCSVFile(report.getSignalsFilePath());
+
+        System.out.println("----------------------------------------------");
+
         int option;
-        do{
-            System.out.println("0) Back to the Patient Menu");
-            System.out.println("1) Add an observation");
-                option = Utilities.readInteger("Select an option: ");
-                switch(option){
-                    case 0: return;
-                    case 1:
-                        this.addObservationMenu(report);
-                        return;
-                    default:
-                        System.out.println("Please select a valid option.\n");
-                        break;
-                }
+
+        do {
+            System.out.println("""
+            ╔════════════════════════════════════════╗
+            ║              0) Back to Menu           ║
+            ║              1) Add Observation        ║
+            ╚════════════════════════════════════════╝
+            """);
+            option = Utilities.readInteger("-> Select an option: ");
+
+            switch (option) {
+                case 0:
+                    return;
+                case 1:
+                    this.addObservationMenu(report);
+                    return;
+                default:
+                    System.out.println("\n-> Please select a valid option.\n");
+                    break;
+            }
         } while(true);
     }
 
