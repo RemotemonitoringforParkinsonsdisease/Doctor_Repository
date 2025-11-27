@@ -24,12 +24,28 @@ public class UI {
         boolean connected = false;
 
         while (!connected) {
-            System.out.println("Select IP Address and Port to connect to :");
-            String ipAddress = Utilities.readString("IP Address: ");
-            int port = Utilities.readInteger("Port: ");
+            System.out.println("""
+            ╔══════════════════════════════════════════════╗
+            ║           DOCTOR APPLICATION - CONNECT       ║
+            ║                                              ║
+            ║   Please enter the server connection info    ║
+            ╚══════════════════════════════════════════════╝
+            """);
+            String ipAddress = Utilities.readString("-> IP Address: ");
+            int port = Utilities.readInteger("-> Port: ");
 
-            this.connection = new Connection(ipAddress, port);
-            connected = true;
+            try {
+                this.connection = new Connection(ipAddress, port);
+                connected = true;
+                System.out.println("""
+                ╔══════════════════════════════════════════════╗
+                ║             CONNECTION SUCCESS!              ║
+                ╚══════════════════════════════════════════════╝
+                """);
+            } catch (Exception e) {
+                System.out.println("Could not connect to " + ipAddress + ":" + port);
+                System.out.println("Please try again.\n");
+            }
         }
         try {
             connection.getSendViaNetwork().sendInt(2);
@@ -45,9 +61,16 @@ public class UI {
     private void preLoggedMenu() throws IOException {
         do {
             int option = 0;
-            System.out.println("-----WELCOME TO THE DOCTOR APPLICATION-----");
-            System.out.println("1) Register\n2) Log in\n3) Exit");
-            option = Utilities.readInteger("Select an option: ");
+            System.out.println("""
+            ╔════════════════════════════════════════╗
+            ║     WELCOME TO DOCTOR APPLICATION      ║
+            ║                                        ║
+            ║     1) Register                        ║
+            ║     2) Log in                          ║
+            ║     3) Exit                            ║
+            ╚════════════════════════════════════════╝
+            """);
+            option = Utilities.readInteger("-> Select an option: ");
             switch (option){
                 case 1:
                     connection.getSendViaNetwork().sendInt(option);
