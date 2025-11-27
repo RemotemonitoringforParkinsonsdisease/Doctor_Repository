@@ -17,7 +17,6 @@ public class UI {
 
     public static void main(String[] args) throws IOException {
         UI ui = new UI();
-        //TODO: Excepciones
         ui.startConnection();
     }
 
@@ -92,6 +91,7 @@ public class UI {
                 return;
             } else if (message.equals("EMAIL ERROR")) {
                 System.out.println("This email is already associated with a doctor");
+                return;
             }
         }while(true);
     }
