@@ -194,27 +194,24 @@ public class UI {
             if(doctor.getPatients().isEmpty()){
                 System.out.println("-> Dr "+ doctor.getFullName()+ " you have no patients yet! ");
                 System.out.println("----------------------------------------------");
-                return;
-            } else {
+            }else{
                 System.out.println("-> Your patients are: ");
                 System.out.println("**********************************************");
-                for(int i = 1; i <= doctor.getPatients().size(); i++){
-                    System.out.println(i+") "+doctor.getPatients().get(i-1).getFullName());
+                for (int i = 1; i <= doctor.getPatients().size(); i++) {
+                    System.out.println(i + ") " + doctor.getPatients().get(i - 1).getFullName());
                 }
                 System.out.println("**********************************************");
-
-                int option = Utilities.readInteger("-> Select a patient to see its info (press 0 to log out): ");
-
-                if(option == 0){
-                    connection.getSendViaNetwork().sendInt(0);
-                    this.preLoggedMenu();
-                }else if(option >= 1 && option <= doctor.getPatients().size()){
-                    connection.getSendViaNetwork().sendInt(1);
-                    this.patientMenu(doctor.getPatients().get(option - 1));
-                }else {
-                    System.out.println("-> Please select a valid option!");
-                    System.out.println("----------------------------------------------");
-                }
+            }
+            int option = Utilities.readInteger("-> Select a patient to see its info (press 0 to log out): ");
+            if (option == 0) {
+                connection.getSendViaNetwork().sendInt(0);
+                preLoggedMenu();
+            } else if (option >= 1 && option <= doctor.getPatients().size()) {
+                connection.getSendViaNetwork().sendInt(1);
+                this.patientMenu(doctor.getPatients().get(option - 1));
+            } else {
+                System.out.println("-> Please select a valid option!");
+                System.out.println("----------------------------------------------");
             }
         } while(true);
     }
@@ -241,7 +238,6 @@ public class UI {
                 return;
             }
             if (option >= 1 && option <= patient.getReports().size()){
-                connection.getSendViaNetwork().sendInt(1);
                 this.reportMenu(patient.getReports().get(option - 1));
             }
         } while(true);
@@ -255,6 +251,9 @@ public class UI {
             """);
         System.out.println("-> Report Date " + report.getReportDate());
         System.out.println("-> Patient Observation: " + report.getPatientObservation());
+        if(report.getDoctorObservation() != ""){
+            System.out.println("-> Doctor Observation: " + report.getDoctorObservation());
+        }
         System.out.println("-> Symptoms: ");
         for(int i = 0; i < report.getSymptoms().size(); i++){
             System.out.println((i+1) + ") " + report.getSymptoms().get(i));
@@ -273,6 +272,7 @@ public class UI {
                 case 0:
                     return;
                 case 1:
+                    connection.getSendViaNetwork().sendInt(1);
                     this.addObservationMenu(report);
                     return;
                 default:
@@ -299,13 +299,10 @@ public class UI {
                 ║          EXITING APPLICATION           ║
                 ╚════════════════════════════════════════╝
                 """);
-
         System.out.println("-> Closing Doctor Application...");
         System.out.println("-> Releasing resources...");
         System.out.println("----------------------------------------------");
-
         connection.releaseResources(); // (Opcional) enviar feedback al server
-
         System.out.println("-> Goodbye!");
         System.out.println("----------------------------------------------");
 
