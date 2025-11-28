@@ -81,15 +81,14 @@ public class Utilities {
     }
 
     public static void printCSVFile(String filePath) {
-        System.out.println("\n----- CSV FILE CONTENT -----\n");
-
+        System.out.println("\n-> Data file of signals recorded:");
         try {
             Path path = Paths.get(filePath);
 
             // Leer todas las líneas del archivo y escribirlas en consola
+            System.out.println("**********************************************");
             Files.lines(path).forEach(System.out::println);
-
-            System.out.println("\n----- END OF FILE -----\n");
+            System.out.println("**********************************************\n");
 
         } catch (IOException e) {
             System.out.println("Error reading CSV file: " + e.getMessage());
