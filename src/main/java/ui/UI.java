@@ -134,7 +134,7 @@ public class UI {
         do {
             System.out.println("""
             ╔════════════════════════════════════════╗
-            ║             LOGIN DOCTOR MENU          ║
+            ║            DOCTOR LOGIN MENU           ║
             ╚════════════════════════════════════════╝
             """);
             String email;
