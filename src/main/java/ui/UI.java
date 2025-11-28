@@ -185,7 +185,7 @@ public class UI {
         do{
             System.out.println("""
             ╔════════════════════════════════════════╗
-            ║            MAIN DOCTOR MENU            ║
+            ║           DOCTOR MAIN MENU             ║
             ╚════════════════════════════════════════╝
             """);
             System.out.println("-> Welcome Dr " + doctor.getFullName() + "!");
