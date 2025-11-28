@@ -194,6 +194,8 @@ public class UI {
             if(doctor.getPatients().isEmpty()){
                 System.out.println("-> Dr "+ doctor.getFullName()+ " you have no patients yet! ");
                 System.out.println("----------------------------------------------");
+                connection.getSendViaNetwork().sendInt(0);
+                this.preLoggedMenu();
             }else{
                 System.out.println("-> Your patients are: ");
                 System.out.println("**********************************************");
