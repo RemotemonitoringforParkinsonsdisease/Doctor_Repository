@@ -1,15 +1,8 @@
 package ui;
 
 import POJOs.*;
-import manageData.ReceiveDataViaNetwork;
-import javax.print.Doc;
-import java.io.Console;
 import java.io.IOException;
-import java.net.Socket;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class UI {
 
@@ -33,7 +26,6 @@ public class UI {
             """);
             String ipAddress = Utilities.readString("-> IP Address: ");
             int port = Utilities.readInteger("-> Port: ");
-            System.out.println("----------------------------------------------");
 
             try {
                 this.connection = new Connection(ipAddress, port);
@@ -43,7 +35,7 @@ public class UI {
                 ║             CONNECTION SUCCESS!              ║
                 ╚══════════════════════════════════════════════╝
                 """);
-                System.out.println("----------------------------------------------");
+                //System.out.println("----------------------------------------------");
 
             } catch (Exception e) {
                 System.out.println("""
@@ -97,12 +89,9 @@ public class UI {
                 default:
                     System.out.println("Please select a valid option.\n");
                     System.out.println("----------------------------------------------");
-
                     break;
             }
-            System.out.println("----------------------------------------------");
         } while(true);
-
     }
 
     private void registerMenu() throws IOException {
@@ -119,24 +108,24 @@ public class UI {
                 valid = Utilities.checkEmail(email);
 
             }while(!valid);
+
             connection.getSendViaNetwork().sendStrings(email);//le mando el email al servidor para que lo compruebe
-            //System.out.println("email sent: "+ email);
             String message = connection.getReceiveViaNetwork().receiveString();//Recibo un mensaje del servidor
-            //System.out.println(message);
+
             if (message.equals("EMAIL OK")) {
-                System.out.println("""
-                ╔══════════════════════════════════════════════╗
-                ║                EMAIL ACCEPTED                ║
-                ╚══════════════════════════════════════════════╝
-                """);
+                System.out.println("-> Email accepted! ");
+                System.out.println("----------------------------------------------");
                 String fullName = Utilities.readString("-> Enter your full name: ");
                 LocalDate dob = Utilities.readDate("-> Enter your DOB: ");
                 String password = Utilities.readString("-> Enter your password: ");
                 Doctor preDoctor = new Doctor(fullName, password, dob);
                 connection.getSendViaNetwork().sendRegisteredDoctor(preDoctor);
+                System.out.println("-> Register successful! ");
+                System.out.println("----------------------------------------------");
                 return;
             } else if (message.equals("EMAIL ERROR")) {
                 System.out.println("-> This email is already associated with a doctor! ");
+                System.out.println("----------------------------------------------");
                 return;
             }
         }while(true);
@@ -160,17 +149,13 @@ public class UI {
             String emailVerification = connection.getReceiveViaNetwork().receiveString();
 
             if (emailVerification.equals("EMAIL OK")) {
-                System.out.println("""
-                ╔══════════════════════════════════════════════╗
-                ║                EMAIL ACCEPTED                ║
-                ╚══════════════════════════════════════════════╝
-                """);
+                System.out.println("-> Email accepted! ");
+                System.out.println("----------------------------------------------");
 
                 String password;
                 do {
                     password = Utilities.readString("-> Enter your password: ");
                     if (password == null || password.isEmpty()) {
-                        System.out.println("----------------------------------------------");
                         System.out.println("-> Password cannot be empty!");
                         System.out.println("----------------------------------------------");
                     }
@@ -180,26 +165,17 @@ public class UI {
                 String passwordVerification = connection.getReceiveViaNetwork().receiveString();
 
                 if (passwordVerification.equals("PASSWORD OK")) {
-                    System.out.println("""
-                    ╔══════════════════════════════════════════════╗
-                    ║               LOGIN SUCCESSFUL               ║
-                    ╚══════════════════════════════════════════════╝
-                    """);
+                    System.out.println("-> Login successful! ");
+                    System.out.println("----------------------------------------------");
                     this.loggedMenu();
                 } else {
-                    System.out.println("""
-                    ╔══════════════════════════════════════════════╗
-                    ║               PASSWORD INCORRECT             ║
-                    ╚══════════════════════════════════════════════╝
-                    """);
+                    System.out.println("-> Password incorrect! ");
+                    System.out.println("----------------------------------------------");
                     return;
                 }
             }else {
-                System.out.println("""
-                ╔══════════════════════════════════════════════╗
-                ║                EMAIL NOT FOUND               ║
-                ╚══════════════════════════════════════════════╝
-                """);
+                System.out.println("-> Email not found! ");
+                System.out.println("----------------------------------------------");
                 return;
             }
         }while (true);
@@ -210,61 +186,37 @@ public class UI {
         do{
             System.out.println("""
             ╔════════════════════════════════════════╗
-            ║              MAIN DOCTOR MENU          ║
+            ║            MAIN DOCTOR MENU            ║
             ╚════════════════════════════════════════╝
             """);
-            System.out.println("-> Welcome Dr " + doctor.getFullName() + "! \n");
-            System.out.println("----------------------------------------------");
-            System.out.println("""
-            ╔════════════════════════════════════════╗
-            ║              0) Log out                ║
-            ║              1) See Patients           ║
-            ╚════════════════════════════════════════╝
-            """);
-            int option = Utilities.readInteger("-> Select an option: ");
+            System.out.println("-> Welcome Dr " + doctor.getFullName() + "!");
 
-            if (option == 0) {
-                connection.getSendViaNetwork().sendInt(0);
-                this.preLoggedMenu();
-
-            } else if (option == 1) {
-                connection.getSendViaNetwork().sendInt(1);
-                showPatientList(doctor);
-
+            if(doctor.getPatients().isEmpty()){
+                System.out.println("-> Dr "+ doctor.getFullName()+ " you have no patients yet! ");
+                System.out.println("----------------------------------------------");
+                return;
             } else {
-                System.out.println("\n-> Please select a valid option! \n");
+                System.out.println("-> Your patients are: ");
+                System.out.println("**********************************************");
+                for(int i = 1; i <= doctor.getPatients().size(); i++){
+                    System.out.println(i+") "+doctor.getPatients().get(i-1).getFullName());
+                }
+                System.out.println("**********************************************");
+
+                int option = Utilities.readInteger("-> Select a patient to see its info (press 0 to log out): ");
+
+                if(option == 0){
+                    connection.getSendViaNetwork().sendInt(0);
+                    this.preLoggedMenu();
+                }else if(option >= 1 && option <= doctor.getPatients().size()){
+                    connection.getSendViaNetwork().sendInt(1);
+                    this.patientMenu(doctor.getPatients().get(option - 1));
+                }else {
+                    System.out.println("-> Please select a valid option!");
+                    System.out.println("----------------------------------------------");
+                }
             }
         } while(true);
-    }
-
-    public void showPatientList(Doctor doctor) throws IOException {
-        System.out.println("""
-        ╔════════════════════════════════════════╗
-        ║              YOUR PATIENTS             ║
-        ╚════════════════════════════════════════╝
-        """);
-
-        if (doctor.getPatients().isEmpty()) {
-            System.out.println("-> You currently have no assigned patients! \n");
-            return;
-        }
-
-        for (int i = 1; i <= doctor.getPatients().size(); i++) {
-            System.out.println("  " + i + ") " + doctor.getPatients().get(i - 1).getFullName());
-        }
-
-        System.out.println("\n----------------------------------------------");
-        int option = Utilities.readInteger("-> Select a patient (0 to go back): ");
-        if (option == 0) {
-            return;
-        }
-
-        if (option >= 1 && option <= doctor.getPatients().size()) {
-            connection.getSendViaNetwork().sendInt(1);
-            this.patientMenu(doctor.getPatients().get(option - 1));
-        } else {
-            System.out.println("-> Invalid option! \n");
-        }
     }
 
     private void patientMenu(Patient patient) throws IOException {
@@ -274,105 +226,89 @@ public class UI {
         do{
             System.out.println("""
             ╔════════════════════════════════════════╗
-            ║               PATIENT MENU             ║
+            ║              PATIENT INFO              ║
             ╚════════════════════════════════════════╝
             """);
-            System.out.println("-> Patient: " + patient.getFullName() + "\n");
-            System.out.println("----------------------------------------------");
-
-            System.out.println("""
-            ╔════════════════════════════════════════╗
-            ║             0) Back to Patients        ║
-            ╟────────────────────────────────────────╢
-            ║             Reports Available          ║
-            ╚════════════════════════════════════════╝
-            """);
-
-            if (patient.getReports().isEmpty()) {
-                System.out.println("-> This patient has no reports yet! \n");
-            } else {
-                for (int i = 0; i < patient.getReports().size(); i++) {
-                    System.out.println("  " + (i + 1) + ") Report Date: " + patient.getReports().get(i).getReportDate());
-                }
-                System.out.println();
+            System.out.println("-> Patient: " + patient.getFullName());
+            System.out.println("**********************************************");
+            for(int i = 0; i < patient.getReports().size(); i++){
+                System.out.println((i+1) + ") Report Date: " + patient.getReports().get(i).getReportDate());
             }
-
-            option = Utilities.readInteger("-> Select an option: ");
-
-            // Volver atrás
-            if (option == 0) {
+            System.out.println("**********************************************");
+            option = Utilities.readInteger("-> Select a report to review (press 0 to go to the main doctor menu): ");
+            if(option == 0){
                 connection.getSendViaNetwork().sendInt(0);
                 return;
             }
-
-            // Acceder a report
-            if (option >= 1 && option <= patient.getReports().size()) {
+            if (option >= 1 && option <= patient.getReports().size()){
                 connection.getSendViaNetwork().sendInt(1);
                 this.reportMenu(patient.getReports().get(option - 1));
-            } else {
-                System.out.println("\n-> Invalid option. Please try again! \n");
             }
         } while(true);
     }
 
     private void reportMenu(Report report) throws IOException {
         System.out.println("""
-        ╔════════════════════════════════════════╗
-        ║                REPORT MENU             ║
-        ╚════════════════════════════════════════╝
-        """);
-
-        System.out.println("-> Report Date: " + report.getReportDate());
-        System.out.println("----------------------------------------------");
-
-        System.out.println("-> Patient Observation:");
-        System.out.println("   " + report.getPatientObservation() + "\n");
-
-        System.out.println("-> Symptoms:");
-        System.out.println("   " + report.getSymptoms() + "\n");
-
-        System.out.println("-> Recorded Signals (CSV file):");
-        Utilities.printCSVFile(report.getSignalsFilePath());
-
-        System.out.println("----------------------------------------------");
-
-        int option;
-
-        do {
-            System.out.println("""
             ╔════════════════════════════════════════╗
-            ║              0) Back to Menu           ║
-            ║              1) Add Observation        ║
+            ║              REPORT INFO               ║
             ╚════════════════════════════════════════╝
             """);
+        System.out.println("-> Report Date " + report.getReportDate());
+        System.out.println("-> Patient Observation: " + report.getPatientObservation());
+        System.out.println("-> Symptoms: ");
+        for(int i = 0; i < report.getSymptoms().size(); i++){
+            System.out.println((i+1) + ") " + report.getSymptoms().get(i));
+        }
+        Utilities.printCSVFile(report.getSignalsFilePath());
+        int option;
+        do{
+            System.out.println("""
+            ╔════════════════════════════════════════════╗
+            ║      0) Back to the patient info menu      ║
+            ║      1) Add an observation                 ║
+            ╚════════════════════════════════════════════╝
+            """);
             option = Utilities.readInteger("-> Select an option: ");
-
-            switch (option) {
+            switch(option){
                 case 0:
                     return;
                 case 1:
                     this.addObservationMenu(report);
                     return;
                 default:
-                    System.out.println("\n-> Please select a valid option.\n");
+                    System.out.println("-> Please select a valid option! ");
                     break;
-            }
+                }
         } while(true);
     }
 
     private void addObservationMenu(Report report) throws IOException {
-        String doctorObervation = Utilities.readString("Introduce the observation: ");
+        System.out.println("----------------------------------------------");
+        String doctorObervation = Utilities.readString("-> Introduce the observation: ");
         report.setDoctorObservation(doctorObervation);
         connection.getSendViaNetwork().sendInt(report.getReportId());
         connection.getSendViaNetwork().sendStrings(doctorObervation);
-        String message = connection.getReceiveViaNetwork().receiveString();
-        System.out.println(message);
+        connection.getReceiveViaNetwork().receiveString();
+        System.out.println("-> The observation has been added to the report! ");
+        System.out.println("----------------------------------------------");
     }
 
-    private void exitMenu(){
-        System.out.println("Exiting Doctor Application");
-        connection.releaseResources(); //Alomejor deberíamos envíar algo de feedback al server
+    private void exitMenu() {
+        System.out.println("""
+                ╔════════════════════════════════════════╗
+                ║          EXITING APPLICATION           ║
+                ╚════════════════════════════════════════╝
+                """);
+
+        System.out.println("-> Closing Doctor Application...");
+        System.out.println("-> Releasing resources...");
+        System.out.println("----------------------------------------------");
+
+        connection.releaseResources(); // (Opcional) enviar feedback al server
+
+        System.out.println("-> Goodbye!");
+        System.out.println("----------------------------------------------");
+
         System.exit(0);
     }
-
 }
