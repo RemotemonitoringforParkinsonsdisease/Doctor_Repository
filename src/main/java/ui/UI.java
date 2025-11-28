@@ -86,7 +86,7 @@ public class UI {
                     this.exitMenu();
                     break;
                 default:
-                    System.out.println("Please select a valid option.\n");
+                    System.out.println("-> Please select a valid option!");
                     System.out.println("----------------------------------------------");
                     break;
             }
