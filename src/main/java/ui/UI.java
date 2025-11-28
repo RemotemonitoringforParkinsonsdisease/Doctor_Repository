@@ -297,7 +297,7 @@ public class UI {
     private void exitMenu() {
         System.out.println("""
                 ╔════════════════════════════════════════╗
-                ║          EXITING APPLICATION           ║
+                ║      EXITING DOCTOR APPLICATION        ║
                 ╚════════════════════════════════════════╝
                 """);
         System.out.println("-> Closing Doctor Application...");
