@@ -11,12 +11,6 @@ public class Patient  {
     private List<Report> reports;
     private String fullName;
 
-    public Patient(Integer patientId, LocalDate dob, List<Report> reports, String fullName) {
-        this.patientId = patientId;
-        this.dob = dob;
-        this.reports = reports;
-        this.fullName = fullName;
-    }
     public Patient(Integer patientId, String fullName, LocalDate dob) {
         this.patientId = patientId;
         this.dob = dob;
@@ -27,16 +21,8 @@ public class Patient  {
         return patientId;
     }
 
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
-    }
-
     public LocalDate getDob() {
         return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
     }
 
     public List<Report> getReports() {
@@ -46,10 +32,8 @@ public class Patient  {
     public void setReports(List<Report> reports) {
         this.reports = reports;
     }
+
     public String getFullName() {
         return fullName;
-    }
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 }

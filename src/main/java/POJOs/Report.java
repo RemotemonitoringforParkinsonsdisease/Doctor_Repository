@@ -28,40 +28,20 @@ public class Report {
         return reportId;
     }
 
-    public void setReportId(Integer reportId) {
-        this.reportId = reportId;
-    }
-
     public Integer getPatientId() {
         return patientId;
-    }
-
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
     }
 
     public LocalDate getReportDate() {
         return reportDate;
     }
 
-    public void setReportDate(LocalDate reportDate) {
-        this.reportDate = reportDate;
-    }
-
     public List<Symptoms> getSymptoms() {
         return symptoms;
     }
 
-    public void setSymptoms(List<Symptoms> symptoms) {
-        this.symptoms = symptoms;
-    }
-
     public String getPatientObservation() {
         return patientObservation;
-    }
-
-    public void setPatientObservation(String patientObservation) {
-        this.patientObservation = patientObservation;
     }
 
     public String getDoctorObservation() {
@@ -74,9 +54,5 @@ public class Report {
 
     public String getSignalsFilePath() {
         return signalsFilePath;
-    }
-
-    public void setSignalsFilePath(String signalsFilePath) {
-        this.signalsFilePath = signalsFilePath;
     }
 }

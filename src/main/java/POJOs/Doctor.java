@@ -13,15 +13,6 @@ public class Doctor {
     private LocalDate dob;
     private List<Patient> patients;
 
-
-    public Doctor(Integer userId, Integer doctorId, String fullName, String doctorPassword, LocalDate dob, List<Patient> patients) {
-        this.userId = userId;
-        this.doctorId = doctorId;
-        this.fullName = fullName;
-        this.doctorPassword = doctorPassword;
-        this.dob = dob;
-        this.patients = patients;
-    }
     public Doctor(Integer userID, Integer doctorId, String fullName , String doctorPassword, LocalDate dob) {
         this.userId = userID;
         this.doctorId = doctorId;
@@ -31,34 +22,22 @@ public class Doctor {
         this.patients = new ArrayList<Patient>();
     }
 
-public Doctor(String fullName , String doctorPassword, LocalDate dob) {
+    public Doctor(String fullName , String doctorPassword, LocalDate dob) {
         this.fullName = fullName;
         this.doctorPassword = doctorPassword;
         this.dob = dob;
-}
+    }
 
     public Integer getDoctorId() {
         return doctorId;
-    }
-
-    public void setDoctorId(Integer doctorId) {
-        this.doctorId = doctorId;
     }
 
     public String getDoctorPassword() {
         return doctorPassword;
     }
 
-    public void setDoctorPassword(String doctorPassword) {
-        this.doctorPassword = doctorPassword;
-    }
-
     public LocalDate getDob() {
         return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
     }
 
     public List<Patient> getPatients() {
@@ -73,15 +52,7 @@ public Doctor(String fullName , String doctorPassword, LocalDate dob) {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
     public String getFullName() {
         return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 }

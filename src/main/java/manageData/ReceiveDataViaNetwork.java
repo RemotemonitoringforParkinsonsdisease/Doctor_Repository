@@ -125,5 +125,4 @@ public class ReceiveDataViaNetwork {
         fos.close();
         return filePath.toString(); // ruta en el servidor
     }
-
 }
