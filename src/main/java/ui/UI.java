@@ -35,7 +35,6 @@ public class UI {
                 ║             CONNECTION SUCCESS!              ║
                 ╚══════════════════════════════════════════════╝
                 """);
-                //System.out.println("----------------------------------------------");
 
             } catch (Exception e) {
                 System.out.println("""
