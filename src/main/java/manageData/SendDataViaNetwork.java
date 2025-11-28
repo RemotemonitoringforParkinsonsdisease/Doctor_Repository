@@ -1,11 +1,7 @@
 package manageData;
+
 import POJOs.Doctor;
-import POJOs.Patient;
-
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 public class SendDataViaNetwork {
 
