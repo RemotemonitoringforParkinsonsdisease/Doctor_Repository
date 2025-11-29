@@ -48,7 +48,6 @@ public class Utilities {
         }
     }
 
-
     /**
      * Reads a valid date from the console by requesting day, month, and year separately.
      * Repeats the process until a valid date is entered.
