@@ -4,15 +4,38 @@ import POJOs.*;
 import java.io.IOException;
 import java.time.LocalDate;
 
+/**
+ * Main user interface for the Doctor Application. This class handles all user interactions,
+ * including establishing a connection to the server, logging in, registering doctors,
+ * displaying patients and reports, and sending or receiving data through the network.
+ *
+ * The UI class communicates with the server using a {@link Connection} object, which
+ * internally manages data streams and high-level send/receive operations.
+ *
+ * This class presents several menus (pre-login, login, registration, patient selection,
+ * report viewing, and adding observations) and routes the user through the system flow.
+ */
 public class UI {
 
     private Connection connection;
 
+    /**
+     * Entry point of the Doctor Application.
+     *
+     * @param args program arguments (not used)
+     * @throws IOException if an error occurs while starting the connection
+     */
     public static void main(String[] args) throws IOException {
         UI ui = new UI();
         ui.startConnection();
     }
 
+    /**
+     * Starts the connection menu, asking the user for the server IP and port.
+     * If the connection is successful, it proceeds to the pre-login menu.
+     *
+     * @throws IOException if an I/O error occurs during communication
+     */
     private void startConnection() throws IOException {
         boolean connected = false;
 
@@ -59,6 +82,12 @@ public class UI {
         }
     }
 
+    /**
+     * Displays the menu shown before logging in, allowing the user to register,
+     * log in, or exit the application.
+     *
+     * @throws IOException if an error occurs during communication with the server
+     */
     private void preLoggedMenu() throws IOException {
         do {
             int option = 0;
@@ -93,6 +122,12 @@ public class UI {
         } while(true);
     }
 
+    /**
+     * Handles doctor registration, including email validation, sending registration data
+     * to the server, and confirming the result.
+     *
+     * @throws IOException if an error occurs during communication
+     */
     private void registerMenu() throws IOException {
         do {
             System.out.println("""
@@ -108,8 +143,8 @@ public class UI {
 
             }while(!valid);
 
-            connection.getSendViaNetwork().sendStrings(email);//le mando el email al servidor para que lo compruebe
-            String message = connection.getReceiveViaNetwork().receiveString();//Recibo un mensaje del servidor
+            connection.getSendViaNetwork().sendStrings(email);
+            String message = connection.getReceiveViaNetwork().receiveString();
 
             if (message.equals("EMAIL OK")) {
                 System.out.println("-> Email accepted! ");
@@ -130,6 +165,12 @@ public class UI {
         }while(true);
     }
 
+    /**
+     * Handles the login process, including verifying email and password,
+     * and routing the user to the doctor main menu.
+     *
+     * @throws IOException if an error occurs during communication
+     */
     private void loginMenu() throws IOException {
         do {
             System.out.println("""
@@ -180,6 +221,12 @@ public class UI {
         }while (true);
     }
 
+    /**
+     * Displays the main menu after the doctor has logged in, showing the list
+     * of patients associated with the doctor.
+     *
+     * @throws IOException if an error occurs while receiving data
+     */
     private void loggedMenu() throws IOException {
         Doctor doctor = connection.getReceiveViaNetwork().receiveDoctor();
         do{
@@ -217,9 +264,15 @@ public class UI {
         } while(true);
     }
 
+    /**
+     * Displays the selected patient's information and list of reports.
+     *
+     * @param patient the selected patient
+     * @throws IOException if an error occurs while sending or receiving data
+     */
     private void patientMenu(Patient patient) throws IOException {
-        connection.getSendViaNetwork().sendInt(patient.getPatientId());//Se manda el id del paciente al server
-        patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient());//Se recibe los records de dicho patient
+        connection.getSendViaNetwork().sendInt(patient.getPatientId());
+        patient.setReports(connection.getReceiveViaNetwork().receiveReportsOfAPatient());
         int option = 0;
         do{
             System.out.println("""
@@ -244,6 +297,13 @@ public class UI {
         } while(true);
     }
 
+    /**
+     * Displays the details of a selected report, including symptoms, observations,
+     * and the associated signals file.
+     *
+     * @param report the report selected by the user
+     * @throws IOException if an error occurs during communication
+     */
     private void reportMenu(Report report) throws IOException {
         System.out.println("""
             ╔════════════════════════════════════════╗
@@ -283,6 +343,13 @@ public class UI {
         } while(true);
     }
 
+    /**
+     * Allows the doctor to add an observation to a report, sending the updated
+     * information back to the server.
+     *
+     * @param report the report being updated
+     * @throws IOException if an error occurs while sending or receiving data
+     */
     private void addObservationMenu(Report report) throws IOException {
         System.out.println("----------------------------------------------");
         String doctorObervation = Utilities.readString("-> Introduce the observation: ");
@@ -294,6 +361,9 @@ public class UI {
         System.out.println("----------------------------------------------");
     }
 
+    /**
+     * Exits the application, releasing all network resources cleanly.
+     */
     private void exitMenu() {
         System.out.println("""
                 ╔════════════════════════════════════════╗
@@ -303,7 +373,7 @@ public class UI {
         System.out.println("-> Closing Doctor Application...");
         System.out.println("-> Releasing resources...");
         System.out.println("----------------------------------------------");
-        connection.releaseResources(); // (Opcional) enviar feedback al server
+        connection.releaseResources();
         System.out.println("-> Goodbye!");
         System.out.println("----------------------------------------------");
 

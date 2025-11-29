@@ -11,8 +11,22 @@ import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Utility class providing helper methods for user input, email validation,
+ * date processing, and printing CSV files in the Doctor Application.
+ *
+ * This class contains only static methods and is used by the UI to interact
+ * with the user and to validate or display data.
+ */
 public class Utilities {
 
+    /**
+     * Reads an integer from the console, showing a custom question.
+     * The method repeats until a valid whole number is entered.
+     *
+     * @param question the prompt shown to the user
+     * @return the integer entered by the user
+     */
     public static int readInteger(String question) {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader buffer = new BufferedReader(input);
@@ -35,6 +49,13 @@ public class Utilities {
     }
 
 
+    /**
+     * Reads a valid date from the console by requesting day, month, and year separately.
+     * Repeats the process until a valid date is entered.
+     *
+     * @param question the question displayed before requesting the date components
+     * @return a LocalDate representing the entered date
+     */
     public static LocalDate readDate(String question) {
 
         while (true) {
@@ -52,6 +73,13 @@ public class Utilities {
         }
     }
 
+    /**
+     * Reads a string from the console, showing a custom prompt.
+     * Repeats the process if an I/O error occurs.
+     *
+     * @param question the prompt shown to the user
+     * @return the string entered by the user
+     */
     public static String readString(String question) {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader buffer = new BufferedReader(input);
@@ -68,6 +96,13 @@ public class Utilities {
         }
     }
 
+    /**
+     * Validates whether a given email follows the expected format.
+     * Displays feedback messages to the user.
+     *
+     * @param email the email to validate
+     * @return true if the email is valid, false otherwise
+     */
     public static boolean checkEmail(String email) {
         Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
         Matcher mather = pattern.matcher(email);
@@ -81,12 +116,16 @@ public class Utilities {
         }
     }
 
+    /**
+     * Prints the contents of a CSV file line by line to the console.
+     * Used to display recorded signals associated with a report.
+     *
+     * @param filePath the path to the CSV file
+     */
     public static void printCSVFile(String filePath) {
         System.out.println("\n-> Data file of signals recorded:");
         try {
             Path path = Paths.get(filePath);
-
-            // Leer todas las líneas del archivo y escribirlas en consola
             System.out.println("**********************************************");
             Files.lines(path).forEach(System.out::println);
             System.out.println("**********************************************\n");
@@ -96,5 +135,4 @@ public class Utilities {
             e.printStackTrace();
         }
     }
-
 }
