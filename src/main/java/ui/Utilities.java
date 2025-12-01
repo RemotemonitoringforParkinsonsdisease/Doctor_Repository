@@ -107,6 +107,7 @@ public class Utilities {
         Matcher mather = pattern.matcher(email);
         System.out.println("-> Checking email");
         if (mather.find()) {
+            System.out.println("-> Email valid! ");
             return true;
         } else {
             System.out.println("-> Please follow the email format: example@example.com");
