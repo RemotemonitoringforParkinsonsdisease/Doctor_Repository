@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="Doctor_Rep:jar">
+  <artifact type="jar" name="Doctor_Test:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Doctor_Rep_jar</output-path>
     <root id="archive" name="Doctor_Test.jar">
       <element id="directory" name="META-INF">
