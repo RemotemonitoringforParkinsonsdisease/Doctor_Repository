@@ -187,7 +187,6 @@ public class UI {
             } while (!valid);
             connection.getSendViaNetwork().sendStrings(email);
             String emailVerification = connection.getReceiveViaNetwork().receiveString();
-            System.out.println(emailVerification);
             if (emailVerification.equals("EMAIL OK")) {
                 System.out.println("-> Email accepted! ");
                 System.out.println("----------------------------------------------");
